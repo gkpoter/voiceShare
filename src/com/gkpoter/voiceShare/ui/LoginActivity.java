@@ -114,6 +114,8 @@ public class LoginActivity extends Activity{
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                state = 100;
+                startActivity(new Intent(LoginActivity.this,MainActivity.class));
                 FinishListActivity.getInstance().exit();
             }
         });

@@ -31,6 +31,7 @@
         <EditText android:layout_width="match_parent"
                   android:hint="邮箱..."
                   android:id="@+id/register_1_email"
+                  android:background="@drawable/blue_text_stroke"
                   android:textSize="25dp"
                   android:layout_marginLeft="20dp"
                   android:layout_marginRight="20dp"

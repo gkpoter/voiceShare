@@ -19,5 +19,6 @@
         <activity android:name=".ui.ForgetActivity2"/>
         <activity android:name=".ui.RegisterActivity1"/>
         <activity android:name=".ui.RegisterActivity2"/>
+        <activity android:name=".ui.MainActivity"/>
     </application>
 </manifest>

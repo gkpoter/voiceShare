@@ -30,6 +30,7 @@
                   android:layout_height="wrap_content"/>
         <EditText android:layout_width="match_parent"
                   android:hint="邮箱..."
+                  android:background="@drawable/blue_text_stroke"
                   android:id="@+id/forget_1_email"
                   android:textSize="25dp"
                   android:layout_marginLeft="20dp"

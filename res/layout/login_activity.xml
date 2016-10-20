@@ -32,6 +32,7 @@
                   android:layout_height="wrap_content"/>
         <EditText android:layout_width="match_parent"
                   android:hint="邮箱..."
+                  android:background="@drawable/blue_text_stroke"
                   android:id="@+id/login_userEmail"
                   android:textSize="25dp"
                   android:layout_marginLeft="20dp"
@@ -51,6 +52,7 @@
                   android:layout_height="wrap_content"/>
         <EditText android:layout_width="match_parent"
                   android:hint="密码..."
+                  android:background="@drawable/blue_text_stroke"
                   android:password="true"
                   android:id="@+id/login_userPassword"
                   android:textSize="25dp"

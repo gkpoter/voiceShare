@@ -1,6 +1,7 @@
 package com.gkpoter.voiceShare.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -91,6 +92,7 @@ public class RegisterActivity2 extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity2.this,MainActivity.class));
                 FinishListActivity.getInstance().exit();
             }
         });
