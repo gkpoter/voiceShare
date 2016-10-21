@@ -88,7 +88,7 @@ public class TopFragment extends Fragment {
         });
 
         /**
-        滚动top555
+        滚动top
          */
         ImageView imageView1=new ImageView(getActivity());
         ImageView imageView2=new ImageView(getActivity());

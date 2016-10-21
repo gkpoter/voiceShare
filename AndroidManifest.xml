@@ -22,5 +22,7 @@
         <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.MainSearchActivity"/>
         <activity android:name=".ui.MainVideoActivity"/>
+        <activity android:name=".ui.CollectsSearchActivity"/>
+        <activity android:name=".ui.UserActivity"/>
     </application>
 </manifest>

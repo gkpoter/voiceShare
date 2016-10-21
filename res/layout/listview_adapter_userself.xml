@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="horizontal"
+                  android:layout_height="115dp">
+        <ImageView android:layout_width="155dp"
+                   android:layout_margin="10dp"
+                   android:background="@drawable/top_back_1"
+                   android:layout_height="match_parent"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:orientation="vertical"
+                      android:layout_height="match_parent">
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:orientation="horizontal"
+                          android:layout_weight="1"
+                          android:layout_height="match_parent">
+                <ImageView android:layout_width="45dp"
+                           android:layout_margin="15dp"
+                           android:layout_gravity="center"
+                           android:background="@drawable/top2"
+                           android:layout_height="45dp"/>
+                <TextView android:layout_width="wrap_content"
+                          android:text="199"
+                          android:layout_marginLeft="10dp"
+                          android:layout_marginRight="15dp"
+                          android:gravity="center_vertical"
+                          android:textSize="25dp"
+                          android:textColor="#0a82ff"
+                          android:layout_height="match_parent"/>
+                <TextView android:layout_width="wrap_content"
+                          android:text="+"
+                          android:textSize="25dp"
+                          android:gravity="center"
+                          android:textColor="#0a82ff"
+                          android:layout_height="match_parent"/>
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:orientation="horizontal"
+                          android:layout_weight="1"
+                          android:layout_height="match_parent">
+                <ImageView android:layout_width="match_parent"
+                           android:src="@drawable/news_bt_bg"
+                           android:clickable="true"
+                           android:layout_margin="10dp"
+                           android:layout_height="match_parent"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
