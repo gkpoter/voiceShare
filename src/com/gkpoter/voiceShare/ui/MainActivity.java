@@ -1,17 +1,17 @@
 package com.gkpoter.voiceShare.ui;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import com.gkpoter.voiceShare.R;
 
 /**
  * Created by dy on 2016/10/19.
  */
-public class MainActivity extends Activity implements View.OnClickListener{
+public class MainActivity extends FragmentActivity implements View.OnClickListener{
 
     private Fragment[] mFragments;
     private FragmentManager fragmentManager;
@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         findViewById(R.id.fragment_3).setOnClickListener(this);
         findViewById(R.id.fragment_4).setOnClickListener(this);
 
-        fragmentManager = getFragmentManager();
+        fragmentManager=getSupportFragmentManager();
         mFragments = new Fragment[4];
 
         mFragments[0] = fragmentManager.findFragmentById(R.id.fragment_main);

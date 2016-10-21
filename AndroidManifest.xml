@@ -20,5 +20,7 @@
         <activity android:name=".ui.RegisterActivity1"/>
         <activity android:name=".ui.RegisterActivity2"/>
         <activity android:name=".ui.MainActivity"/>
+        <activity android:name=".ui.MainSearchActivity"/>
+        <activity android:name=".ui.MainVideoActivity"/>
     </application>
 </manifest>

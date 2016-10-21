@@ -4,9 +4,9 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <VideoView android:layout_width="match_parent"
+    <ImageView android:layout_width="match_parent"
                android:id="@+id/video_main"
-               android:background="@android:color/transparent"
+               android:background="@drawable/top_back_1"
                android:layout_height="215dp"/>
 
     <RelativeLayout android:layout_width="match_parent"
@@ -29,7 +29,9 @@
                   android:layout_toEndOf="@+id/main_data_userImage"/>
 
         <ImageView android:layout_width="50dp"
-                   android:src="@drawable/news"
+                   android:clickable="true"
+                   android:id="@+id/news_image"
+                   android:src="@drawable/news_bt_bg"
                    android:layout_height="match_parent"
                    android:layout_marginTop="5dp"
                    android:layout_marginBottom="5dp"

@@ -1,13 +1,16 @@
 package com.gkpoter.voiceShare.ui.Fragment;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.ui.Adapter.MainAdapter;
+import com.gkpoter.voiceShare.ui.MainSearchActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ public class MainFragment extends Fragment {
     private ListView listView;
     private MainAdapter adapter;
     private List<String> data=new ArrayList<>();
+    private EditText search;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +49,14 @@ public class MainFragment extends Fragment {
         listView= (ListView) getView().findViewById(R.id.listView_main);
         adapter=new MainAdapter(data,getActivity());
         listView.setAdapter(adapter);
+
+        search= (EditText) getView().findViewById(R.id.fragment_main_search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), MainSearchActivity.class));
+            }
+        });
     }
 
 

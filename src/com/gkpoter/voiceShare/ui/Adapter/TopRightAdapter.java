@@ -1,26 +1,24 @@
 package com.gkpoter.voiceShare.ui.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.gkpoter.voiceShare.R;
-import com.gkpoter.voiceShare.ui.MainVideoActivity;
 
 import java.util.List;
 
 /**
- * Created by dy on 2016/10/19.
+ * Created by dy on 2016/10/21.
  */
-public class MainAdapter extends BaseAdapter {
-
+public class TopRightAdapter extends BaseAdapter {
     private List<String> data;
     private Context context;
 
-    public MainAdapter(List<String> data,Context context){
+    public TopRightAdapter(List<String> data,Context context){
         this.data=data;
         this.context=context;
     }
@@ -42,19 +40,18 @@ public class MainAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view = LayoutInflater.from(context).inflate(R.layout.listview_adapter_main,null);
-        touchClick(view);
-
+        view = LayoutInflater.from(context).inflate(R.layout.listview_adapter_topright,null);
+        showTop(i,view);
         return view;
     }
 
-    private void touchClick(View view){
-        view.findViewById(R.id.news_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                context.startActivity(new Intent(context,MainVideoActivity.class));
-            }
-        });
+    private void showTop(int i,View view){
+        if(i==0){
+            view.findViewById(R.id.top_rightList_image).setBackgroundResource(R.drawable.blue_fire);
+            TextView textView= (TextView) view.findViewById(R.id.top_rightList_username);
+            textView.setTextColor(Color.rgb(255, 255, 255));
+            TextView textView_= (TextView) view.findViewById(R.id.top_rightList_num);
+            textView_.setTextColor(Color.rgb(255, 255, 255));
+        }
     }
-
 }
