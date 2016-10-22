@@ -17,6 +17,8 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.ui.MainVideoActivity;
+import com.gkpoter.voiceShare.ui.transformer.DepthPageTransformer;
+import com.gkpoter.voiceShare.ui.transformer.ZoomOutPageTransformer;
 
 /**
  * Created by dy on 2016/10/19.

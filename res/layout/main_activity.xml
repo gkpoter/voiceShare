@@ -1,32 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
+              android:background="#19b4ff"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <fragment android:layout_width="match_parent"
-              android:id="@+id/fragment_main"
-              android:layout_above="@+id/fragment_linear"
-              android:name="com.gkpoter.voiceShare.ui.Fragment.MainFragment"
-              android:layout_height="match_parent"/>
-
-    <fragment android:layout_width="match_parent"
-              android:id="@+id/fragment_top"
-              android:layout_above="@+id/fragment_linear"
-              android:name="com.gkpoter.voiceShare.ui.Fragment.TopFragment"
-              android:layout_height="match_parent"/>
-
-    <fragment android:layout_width="match_parent"
-              android:id="@+id/fragment_collects"
-              android:layout_above="@+id/fragment_linear"
-              android:name="com.gkpoter.voiceShare.ui.Fragment.CollectsFragment"
-              android:layout_height="match_parent"/>
-
-    <fragment android:layout_width="match_parent"
-              android:id="@+id/fragment_self"
-              android:layout_above="@+id/fragment_linear"
-              android:name="com.gkpoter.voiceShare.ui.Fragment.SelfFragment"
-              android:layout_height="match_parent"/>
+    <android.support.v4.view.ViewPager android:layout_width="match_parent"
+               android:id="@+id/main_activity_viewpager"
+               android:layout_above="@+id/fragment_linear"
+               android:layout_height="match_parent"/>
 
     <LinearLayout android:layout_width="match_parent"
                   android:orientation="horizontal"
