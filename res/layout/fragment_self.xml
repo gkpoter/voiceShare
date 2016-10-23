@@ -75,6 +75,33 @@
 
             <RelativeLayout android:layout_width="match_parent"
                             android:clickable="true"
+                            android:id="@+id/self_up_uservideo"
+                            android:background="@drawable/collects_listview_bg"
+                            android:layout_height="55dp">
+                <ImageView android:layout_width="55dp"
+                           android:src="@drawable/up_video"
+                           android:layout_margin="5dp"
+                           android:layout_height="match_parent"
+                           android:id="@+id/self_news_up"/>
+                <TextView android:layout_width="wrap_content"
+                          android:text="上传视频"
+                          android:textSize="15dp"
+                          android:gravity="center"
+                          android:textColor="#3d3d3d"
+                          android:layout_height="match_parent"
+                          android:layout_toEndOf="@+id/self_news_up"/>
+                <ImageView android:layout_width="50dp"
+                           android:layout_marginRight="25dp"
+                           android:layout_marginTop="15dp"
+                           android:layout_marginBottom="15dp"
+                           android:src="@drawable/go"
+                           android:layout_height="match_parent"
+                           android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+            <TextView android:layout_width="match_parent" android:layout_height="5dp"/>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:clickable="true"
                             android:id="@+id/self_mysterious_"
                             android:background="@drawable/collects_listview_bg"
                             android:layout_height="55dp">

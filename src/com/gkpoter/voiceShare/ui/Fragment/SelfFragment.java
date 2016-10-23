@@ -37,6 +37,7 @@ public class SelfFragment extends Fragment implements OnClickListener{
         getView().findViewById(R.id.self_mysterious_).setOnClickListener(this);
         getView().findViewById(R.id.self_news_Back_saying).setOnClickListener(this);
         getView().findViewById(R.id.self_setting).setOnClickListener(this);
+        getView().findViewById(R.id.self_up_uservideo).setOnClickListener(this);
     }
 
     @Override
@@ -60,6 +61,13 @@ public class SelfFragment extends Fragment implements OnClickListener{
             case R.id.self_setting:
                 startActivity(new Intent(getActivity(), SettingActivity.class));
                 break;
+            case R.id.self_up_uservideo:
+                upVideo();
+                break;
         }
+    }
+
+    private void upVideo() {
+
     }
 }

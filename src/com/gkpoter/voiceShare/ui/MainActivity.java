@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.ui.Fragment.*;
 import com.gkpoter.voiceShare.ui.transformer.DepthPageTransformer;
+import com.gkpoter.voiceShare.util.FinishListActivity;
 
 /**
  * Created by dy on 2016/10/19.
@@ -24,6 +25,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        FinishListActivity.getInstance().addActivity(this);
 
         init();
 
