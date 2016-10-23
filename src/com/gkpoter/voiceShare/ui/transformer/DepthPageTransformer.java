@@ -31,7 +31,7 @@ public class DepthPageTransformer implements ViewPager.PageTransformer {
             view.setScaleX(scaleFactor);
             view.setScaleY(scaleFactor);
 
-        } else { // (1,+Infinity]
+        } else {
             view.setAlpha(0);
         }
     }

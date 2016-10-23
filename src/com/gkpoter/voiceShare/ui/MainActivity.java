@@ -9,8 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.ui.Fragment.*;
-import com.gkpoter.voiceShare.ui.transformer.DepthPageTransformer;
 import com.gkpoter.voiceShare.util.FinishListActivity;
+import com.gkpoter.voiceShare.viewpagertransformer.*;
 
 /**
  * Created by dy on 2016/10/19.
@@ -67,7 +67,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             }
         });
         viewPager.setAdapter(adapter);
-        viewPager.setPageTransformer(true,new DepthPageTransformer());
+        viewPager.setPageTransformer(true,new ScaleInOutTransformer());
     }
 
     private void init() {

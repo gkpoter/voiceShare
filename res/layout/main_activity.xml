@@ -5,6 +5,12 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <ImageView android:layout_width="match_parent"
+               android:background="@drawable/voiceshare"
+               android:layout_marginTop="-200dp"
+               android:alpha="0.5"
+               android:layout_height="500dp"/>
+
     <android.support.v4.view.ViewPager android:layout_width="match_parent"
                android:id="@+id/main_activity_viewpager"
                android:layout_above="@+id/fragment_linear"
