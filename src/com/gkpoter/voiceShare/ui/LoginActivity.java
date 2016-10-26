@@ -8,7 +8,10 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.service.LoginService;
 import com.gkpoter.voiceShare.util.FinishListActivity;
+import com.loopj.android.http.RequestParams;
 
 /**
  * Created by dy on 2016/10/18.
@@ -20,6 +23,7 @@ public class LoginActivity extends Activity{
     private TextView hintEmail,hintPass,forget,register;
     private Button login;
     float state = (float) 0.1;
+    private LoginService loginService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,9 +118,24 @@ public class LoginActivity extends Activity{
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                state = 100;
-                startActivity(new Intent(LoginActivity.this,MainActivity.class));
-                FinishListActivity.getInstance().exit();
+                loginService = new LoginService();
+                RequestParams params=new RequestParams();
+                params.put("UserEmail",editEmail.getText().toString());
+                params.put("PassWord",editPass.getText().toString());
+                loginService.post(getApplicationContext(), "doLogin", params, new Listener() {
+                    @Override
+                    public void onSuccess(Object object) {
+                        state = 100;
+                        startActivity(new Intent(LoginActivity.this,MainActivity.class));
+                        FinishListActivity.getInstance().exit();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Toast.makeText(LoginActivity.this, msg+"", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
     }

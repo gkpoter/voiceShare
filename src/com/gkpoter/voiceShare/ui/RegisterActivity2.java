@@ -9,8 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.service.RegisteService;
 import com.gkpoter.voiceShare.util.FinishListActivity;
+import com.loopj.android.http.RequestParams;
 
 /**
  * Created by dy on 2016/10/18.
@@ -19,6 +23,7 @@ public class RegisterActivity2 extends Activity {
     private TextView hintCode,hintPass,hintPassword;
     private EditText checkCode,userName,passWord;
     private Button submit;
+    private RegisteService registeService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +97,24 @@ public class RegisterActivity2 extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(RegisterActivity2.this,MainActivity.class));
-                FinishListActivity.getInstance().exit();
+                registeService = new RegisteService();
+                RequestParams params=new RequestParams();
+                params.put("UserName",userName.getText().toString());
+                params.put("PassWord",passWord.getText().toString());
+                params.put("CheckCode",checkCode.getText().toString());
+                registeService.post(getApplicationContext(), "register_2", params, new Listener() {
+                    @Override
+                    public void onSuccess(Object object) {
+                        startActivity(new Intent(RegisterActivity2.this,MainActivity.class));
+                        FinishListActivity.getInstance().exit();
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        Toast.makeText(RegisterActivity2.this, msg+"", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
         });
     }

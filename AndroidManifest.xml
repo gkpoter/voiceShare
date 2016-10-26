@@ -35,5 +35,6 @@
         <activity android:name=".ui.self.MysteriousActivity"/>
         <activity android:name=".ui.self.NewsBackActivity"/>
         <activity android:name=".ui.self.SettingActivity"/>
+
     </application>
 </manifest>
