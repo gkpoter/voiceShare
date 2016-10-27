@@ -10,6 +10,7 @@ import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
 import com.gkpoter.voiceShare.service.LoginService;
+import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.FinishListActivity;
 import com.loopj.android.http.RequestParams;
 
@@ -126,6 +127,7 @@ public class LoginActivity extends Activity{
                     @Override
                     public void onSuccess(Object object) {
                         state = 100;
+                        saveUser(editEmail.getText().toString(),editPass.getText().toString());
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         FinishListActivity.getInstance().exit();
                     }
@@ -138,5 +140,12 @@ public class LoginActivity extends Activity{
 
             }
         });
+    }
+
+    private void saveUser(String useremail, String password) {
+        DataUtil util=new DataUtil("userlogin",getApplicationContext());
+        util.clearData();
+        util.saveData("useremail",useremail);
+        util.saveData("password",password);
     }
 }

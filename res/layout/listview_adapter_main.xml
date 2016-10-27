@@ -4,9 +4,33 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <ImageView android:layout_width="match_parent"
-               android:id="@+id/video_main"
-               android:background="@drawable/top_back_1"
+    <RelativeLayout android:layout_width="match_parent"
+                    android:visibility="visible"
+                    android:id="@+id/video_layout"
+                    android:layout_height="215dp">
+        <ImageView android:layout_width="match_parent"
+                   android:id="@+id/video_main"
+                   android:clickable="true"
+                   android:background="@drawable/top_back_1"
+                   android:layout_height="match_parent"/>
+
+        <TextView android:layout_width="match_parent"
+                  android:textColor="#ffffff"
+                  android:textSize="25sp"
+                  android:id="@+id/video_title"
+                  android:layout_margin="15dp"
+                  android:layout_height="wrap_content"/>
+
+        <ImageView android:layout_width="50dp"
+                   android:src="@drawable/play_video"
+                   android:layout_height="50dp"
+                   android:layout_centerVertical="true"
+                   android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
+
+    <VideoView android:layout_width="match_parent"
+               android:id="@+id/video_main_"
+               android:visibility="gone"
                android:layout_height="215dp"/>
 
     <RelativeLayout android:layout_width="match_parent"
@@ -21,7 +45,7 @@
                    android:layout_height="match_parent" android:id="@+id/main_data_userImage"/>
 
         <TextView android:layout_width="wrap_content"
-                  android:text="Gkpoter"
+                  android:id="@+id/main_data_userName"
                   android:textColor="#727272"
                   android:gravity="center_vertical"
                   android:textSize="15dp"

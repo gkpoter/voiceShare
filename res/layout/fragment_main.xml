@@ -32,9 +32,16 @@
                   android:layout_height="match_parent"/>
     </LinearLayout>
 
-    <ListView android:layout_width="match_parent"
-              android:id="@+id/listView_main"
-              android:layout_height="match_parent">
-    </ListView>
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+            xmlns:ptr="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/listView_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:fastScrollEnabled="false"
+            android:footerDividersEnabled="false"
+            android:headerDividersEnabled="false"
+            android:smoothScrollbar="true"
+            ptr:ptrMode="both"/>
 
 </LinearLayout>

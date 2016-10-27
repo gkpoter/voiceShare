@@ -5,6 +5,7 @@ package com.gkpoter.voiceShare.bean;
  */
 public class User {
 
+    private Integer UserId;
     private String UserEmail;
     private String PassWord;
     private String UserName;
@@ -15,6 +16,14 @@ public class User {
     private Boolean IsVip;
     private Integer LogDay;
     private Integer Level;
+
+    public Integer getUserId() {
+        return UserId;
+    }
+
+    public void setUserId(Integer userId) {
+        UserId = userId;
+    }
 
     public Integer getFocus() {
         return Focus;

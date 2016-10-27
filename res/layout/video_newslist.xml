@@ -12,7 +12,8 @@
                    android:layout_marginTop="5dp"
                    android:layout_marginBottom="5dp"
                    android:background="@drawable/logo"
-                   android:layout_height="40dp" android:id="@+id/video_news_userImage"/>
+                   android:layout_height="40dp"
+                   android:id="@+id/video_news_userImage"/>
 
         <TextView android:layout_width="wrap_content"
                   android:text="Gkpoter"
@@ -23,9 +24,19 @@
                   android:layout_height="40dp"
                   android:layout_toEndOf="@+id/video_news_userImage"/>
 
+        <TextView android:layout_width="wrap_content"
+                  android:textColor="#727272"
+                  android:gravity="center_vertical"
+                  android:textSize="15dp"
+                  android:id="@+id/video_news_video_uptime"
+                  android:layout_height="40dp"
+                  android:layout_marginRight="25dp"
+                  android:layout_alignParentTop="true"
+                  android:layout_alignParentEnd="true"/>
+
         <TextView android:layout_width="match_parent"
-                  android:text="        评论社区你好Gkpoter评论社区你好Gkpoter评论社区你好Gkpoter"
-                  android:textSize="20dp"
+                  android:id="@+id/video_news_information"
+                  android:textSize="15sp"
                   android:gravity="center_vertical"
                   android:layout_below="@+id/video_news_userName"
                   android:textColor="#6f6f6f"

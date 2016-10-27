@@ -77,7 +77,9 @@
 
             <TextView android:layout_width="match_parent"
                       android:layout_weight="6"
-                      android:text="wishStar"
+                      android:text="发布"
+                      android:id="@+id/video_main_up_news"
+                      android:clickable="true"
                       android:textColor="#0179ff"
                       android:gravity="center"
                       android:layout_height="match_parent"/>

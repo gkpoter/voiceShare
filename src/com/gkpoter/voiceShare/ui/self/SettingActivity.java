@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.ui.LoginActivity;
+import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.FinishListActivity;
 
 /**
@@ -34,6 +35,8 @@ public class SettingActivity extends Activity {
         findViewById(R.id.setting_logout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataUtil util=new DataUtil("userlogin",getApplicationContext());
+                util.clearData();
                 FinishListActivity.getInstance().exit();
                 startActivity(new Intent(SettingActivity.this, LoginActivity.class));
             }

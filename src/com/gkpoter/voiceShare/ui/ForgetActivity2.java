@@ -9,8 +9,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.service.RegisteService;
 import com.gkpoter.voiceShare.util.FinishListActivity;
+import com.loopj.android.http.RequestParams;
 
 /**
  * Created by dy on 2016/10/18.
@@ -93,8 +97,26 @@ public class ForgetActivity2 extends Activity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ForgetActivity2.this,MainActivity.class));
-                FinishListActivity.getInstance().exit();
+                if((pass.getText().toString()+"").equals((passWord.getText().toString()+""))){
+                    RegisteService registeService = new RegisteService();
+                    RequestParams params=new RequestParams();
+                    params.put("PassWord",passWord.getText().toString());
+                    params.put("CheckCode",checkCode.getText().toString());
+                    registeService.post(getApplicationContext(), "forget_2", params, new Listener() {
+                        @Override
+                        public void onSuccess(Object object) {
+                            startActivity(new Intent(ForgetActivity2.this,MainActivity.class));
+                            FinishListActivity.getInstance().exit();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            Toast.makeText(ForgetActivity2.this, msg+"", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    Toast.makeText(ForgetActivity2.this, "密码不一致", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
