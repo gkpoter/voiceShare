@@ -18,6 +18,7 @@ import android.graphics.RectF;
 public class PhotoCut {
 
     public static Bitmap toRoundBitmap(Bitmap bitmap) {
+        if(bitmap==null) return bitmap;
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         float roundPx;

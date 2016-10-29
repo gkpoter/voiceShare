@@ -4,6 +4,11 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <VideoView android:layout_width="fill_parent"
+               android:id="@+id/video_main_"
+               android:visibility="gone"
+               android:layout_height="215dp"/>
+
     <RelativeLayout android:layout_width="match_parent"
                     android:visibility="visible"
                     android:id="@+id/video_layout"
@@ -11,8 +16,7 @@
         <ImageView android:layout_width="match_parent"
                    android:id="@+id/video_main"
                    android:clickable="true"
-                   android:background="@drawable/top_back_1"
-                   android:layout_height="match_parent"/>
+                   android:layout_height="215dp"/>
 
         <TextView android:layout_width="match_parent"
                   android:textColor="#ffffff"
@@ -28,11 +32,6 @@
                    android:layout_centerHorizontal="true"/>
     </RelativeLayout>
 
-    <VideoView android:layout_width="match_parent"
-               android:id="@+id/video_main_"
-               android:visibility="gone"
-               android:layout_height="215dp"/>
-
     <RelativeLayout android:layout_width="match_parent"
                    android:background="#ffffff"
                   android:layout_height="45dp">
@@ -41,7 +40,7 @@
                    android:layout_marginLeft="10dp"
                    android:layout_marginTop="5dp"
                    android:layout_marginBottom="5dp"
-                  android:background="@drawable/logo"
+
                    android:layout_height="match_parent" android:id="@+id/main_data_userImage"/>
 
         <TextView android:layout_width="wrap_content"

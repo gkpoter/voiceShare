@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -76,8 +77,8 @@ public class MainAdapter extends BaseAdapter {
         }
         touchClick(view,i);
 
-        new photoAsyncTask(viewHolder.imageView).execute(data.getVideoData().get(i).getImagePath());
-        new photoAsyncTask(viewHolder.userImage).execute(data.getUserData().get(i).getUserPhoto());
+        new photoAsyncTask(viewHolder.imageView,false).execute(data.getVideoData().get(i).getImagePath());
+        new photoAsyncTask(viewHolder.userImage,true).execute(data.getUserData().get(i).getUserPhoto());
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
 
@@ -123,8 +124,10 @@ public class MainAdapter extends BaseAdapter {
     class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
 
         private ImageView imageView;
-        public photoAsyncTask(ImageView imageView) {
+        private boolean key;
+        public photoAsyncTask(ImageView imageView,boolean key) {
             this.imageView=imageView;
+            this.key=key;
         }
 
         @Override
@@ -154,7 +157,12 @@ public class MainAdapter extends BaseAdapter {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
+            if(key) {
+                this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
+            }else{
+                BitmapDrawable bd= new BitmapDrawable(bitmap);
+                this.imageView.setBackground(bd);
+            }
         }
     }
 
