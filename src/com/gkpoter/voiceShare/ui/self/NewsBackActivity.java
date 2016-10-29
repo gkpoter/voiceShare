@@ -1,6 +1,7 @@
 package com.gkpoter.voiceShare.ui.self;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -52,14 +53,8 @@ public class NewsBackActivity extends Activity {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                 intent.setType(IMAGE_TYPE);
-                intent.putExtra("crop", "true");    // crop=true 有这句才能出来最后的裁剪页面.
-                intent.putExtra("aspectX", 1);      // 这两项为裁剪框的比例.
-                intent.putExtra("aspectY", 1);
-                intent.putExtra("outputX", 200);
-                intent.putExtra("outputY", 200);
-                //输出地址
-                intent.putExtra("output", Uri.fromFile(new File(Environment.getExternalStorageDirectory().getPath()+"/voiceShare.jpg")));
-                intent.putExtra("outputFormat", "JPEG");//返回格式
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(Intent.createChooser(intent, "选择图片"), IMAGE_CODE);
             }
         });
@@ -70,15 +65,13 @@ public class NewsBackActivity extends Activity {
             Log.i("photopath","fail");
             return;
         }
-        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == IMAGE_CODE) {
             Log.i("photopath","success");
             try {
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                options.inSampleSize = 2;
-                Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory().getPath()+"/voiceShare.jpg", options);
-                //Path=Environment.getExternalStorageDirectory().getPath()+"/voiceShare.jpg";
+                Uri uri = data.getData();
+                ContentResolver cr = this.getContentResolver();
+                Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri));
 
                 if (bitmap == null){
                     Log.i("bitmap","null");
