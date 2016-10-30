@@ -75,6 +75,7 @@
 
             <RelativeLayout android:layout_width="match_parent"
                             android:clickable="true"
+                            android:visibility="visible"
                             android:id="@+id/self_up_uservideo"
                             android:background="@drawable/collects_listview_bg"
                             android:layout_height="55dp">
@@ -97,6 +98,21 @@
                            android:src="@drawable/go"
                            android:layout_height="match_parent"
                            android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+            <RelativeLayout android:layout_width="match_parent"
+                            android:clickable="true"
+                            android:visibility="gone"
+                            android:id="@+id/self_up_uservideo_progressbar"
+                            android:background="@drawable/collects_listview_bg"
+                            android:layout_height="55dp">
+
+                <ProgressBar android:layout_width="match_parent"
+                             android:id="@+id/up_uservideo_progressbar"
+                             style="?android:attr/progressBarStyleHorizontal"
+                             android:max="100"
+                             android:progress="0"
+                             android:layout_height="55dp"/>
+
             </RelativeLayout>
             <TextView android:layout_width="match_parent" android:layout_height="5dp"/>
 

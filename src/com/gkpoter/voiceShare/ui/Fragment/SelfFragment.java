@@ -11,10 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.model.Model;
+import com.gkpoter.voiceShare.service.Service;
 import com.gkpoter.voiceShare.ui.UserActivity;
 import com.gkpoter.voiceShare.ui.self.*;
+import com.gkpoter.voiceShare.util.DataUtil;
+import com.gkpoter.voiceShare.util.HttpRequest;
+import com.google.gson.Gson;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import org.apache.http.Header;
 
 import java.io.*;
 import java.net.URI;
@@ -24,6 +35,8 @@ import java.net.URI;
  */
 public class SelfFragment extends Fragment implements OnClickListener{
 
+    private ProgressBar progressBar;
+    private RelativeLayout layout,layout_show;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +59,9 @@ public class SelfFragment extends Fragment implements OnClickListener{
         getView().findViewById(R.id.self_news_Back_saying).setOnClickListener(this);
         getView().findViewById(R.id.self_setting).setOnClickListener(this);
         getView().findViewById(R.id.self_up_uservideo).setOnClickListener(this);
+        progressBar= (ProgressBar) getView().findViewById(R.id.up_uservideo_progressbar);
+        layout= (RelativeLayout) getView().findViewById(R.id.self_up_uservideo_progressbar);
+        layout_show=(RelativeLayout) getView().findViewById(R.id.self_up_uservideo);
     }
 
     @Override
@@ -71,6 +87,8 @@ public class SelfFragment extends Fragment implements OnClickListener{
                 break;
             case R.id.self_up_uservideo:
                 upVideo();
+                layout_show.setVisibility(View.GONE);
+                layout.setVisibility(View.VISIBLE);
                 break;
         }
     }
@@ -86,16 +104,54 @@ public class SelfFragment extends Fragment implements OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != NewsBackActivity.RESULT_OK) {
-            Log.i("photo_path","fail");
+            layout_show.setVisibility(View.VISIBLE);
+            layout.setVisibility(View.GONE);
             return;
         }
         Uri uri = data.getData();
         if (requestCode == IMAGE_CODE) {
-            Log.i("photo_path","success");
             try {
                 File file=new File(new URI(uri.toString()));
-//                Toast.makeText(getActivity(), file.getPath()+"", Toast.LENGTH_SHORT).show();
+                RequestParams params=new RequestParams();
+                DataUtil util=new DataUtil("user",getActivity());
+                params.put("UserVideo",file);
+                params.put("UserId",util.getData("user_id",""));
+                HttpRequest.post(getActivity(), "up_video", params, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int i, Header[] headers, byte[] bytes) {
+                        Log.d("1231323",new String(bytes));
+                        try {
+                            Model model = new Gson().fromJson(new String(bytes), Model.class);
+                            if (model.getState() == 1) {
+                                Toast.makeText(getActivity(), "上传成功", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getActivity(), model.getMsg() + "", Toast.LENGTH_SHORT).show();
+                                getView().findViewById(R.id.self_up_uservideo).setVisibility(View.VISIBLE);
+                                layout.setVisibility(View.GONE);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
 
+                    }
+
+                    @Override
+                    public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
+                        Toast.makeText(getActivity(), "网络错误", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onProgress(long bytesWritten, long totalSize) {
+                        super.onProgress(bytesWritten, totalSize);
+                        int count = (int) ((bytesWritten * 1.0 / totalSize) * 100);
+                        Log.d("information", count+"");
+                        progressBar.setProgress(count);
+                        if(count == 100){
+                            layout_show.setVisibility(View.VISIBLE);
+                            layout.setVisibility(View.GONE);
+                        }
+                    }
+                });
             }catch (Exception e){
                 e.getLocalizedMessage();
             }

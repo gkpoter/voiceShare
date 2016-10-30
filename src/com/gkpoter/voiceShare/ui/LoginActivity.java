@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.model.UserModel;
 import com.gkpoter.voiceShare.service.LoginService;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.FinishListActivity;
@@ -127,6 +128,9 @@ public class LoginActivity extends Activity{
                     @Override
                     public void onSuccess(Object object) {
                         state = 100;
+                        UserModel userModel=new UserModel();
+                        userModel = (UserModel) object;
+                        save(userModel);
                         saveUser(editEmail.getText().toString(),editPass.getText().toString());
                         startActivity(new Intent(LoginActivity.this,MainActivity.class));
                         FinishListActivity.getInstance().exit();
@@ -140,6 +144,20 @@ public class LoginActivity extends Activity{
 
             }
         });
+    }
+
+    private void save(UserModel userModel) {
+        DataUtil util=new DataUtil("user",getApplication());
+        util.clearData();
+        util.saveData("user_id",userModel.getUserId()+"");
+        util.saveData("user_name",userModel.getUserName()+"");
+        util.saveData("user_photo",userModel.getUserPhoto()+"");
+        util.saveData("user_signature",userModel.getSignature()+"");
+        util.saveData("user_selfbackgroung",userModel.getSelfBackgroung()+"");
+        util.saveData("user_focus",userModel.getFocus()+"");
+        util.saveData("user_vip",userModel.getVip()+"");
+        util.saveData("user_logday",userModel.getLogDay()+"");
+        util.saveData("user_level",userModel.getLevel()+"");
     }
 
     private void saveUser(String useremail, String password) {
