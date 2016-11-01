@@ -9,9 +9,9 @@ public class Video {
     private Integer UserId;
     private String ImagePath;
     private String VideoPath;
-    private String VideoYearTop;
-    private String VideoMonthTop;
-    private String StarState;
+    private Integer VideoYearTop;
+    private Integer VideoMonthTop;
+    private Boolean StarState;
     private String UpTime;
     private String VideoInformation;
 
@@ -39,11 +39,11 @@ public class Video {
         ImagePath = imagePath;
     }
 
-    public String getStarState() {
+    public Boolean getStarState() {
         return StarState;
     }
 
-    public void setStarState(String starState) {
+    public void setStarState(Boolean starState) {
         StarState = starState;
     }
 
@@ -63,11 +63,11 @@ public class Video {
         VideoInformation = videoInformation;
     }
 
-    public String getVideoMonthTop() {
+    public Integer getVideoMonthTop() {
         return VideoMonthTop;
     }
 
-    public void setVideoMonthTop(String videoMonthTop) {
+    public void setVideoMonthTop(Integer videoMonthTop) {
         VideoMonthTop = videoMonthTop;
     }
 
@@ -79,11 +79,11 @@ public class Video {
         VideoPath = videoPath;
     }
 
-    public String getVideoYearTop() {
+    public Integer getVideoYearTop() {
         return VideoYearTop;
     }
 
-    public void setVideoYearTop(String videoYearTop) {
+    public void setVideoYearTop(Integer videoYearTop) {
         VideoYearTop = videoYearTop;
     }
 }

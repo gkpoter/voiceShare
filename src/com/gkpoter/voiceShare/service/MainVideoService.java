@@ -18,11 +18,15 @@ public class MainVideoService {
         HttpRequest.get(context, url, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                MainVideoModel model = new Gson().fromJson(new String(bytes), MainVideoModel.class);
-                if(new Integer(1).equals(model.getState())){
-                    listener.onSuccess(model);
-                }else{
-                    listener.onError(model.getMsg());
+                try {
+                    MainVideoModel model = new Gson().fromJson(new String(bytes), MainVideoModel.class);
+                    if (new Integer(1).equals(model.getState())) {
+                        listener.onSuccess(model);
+                    } else {
+                        listener.onError(model.getMsg());
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
             }
 

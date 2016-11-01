@@ -8,10 +8,21 @@
                   android:orientation="horizontal"
                   android:id="@+id/top_rightList_image"
                   android:layout_height="115dp">
-        <ImageView android:layout_width="155dp"
-                   android:layout_margin="15dp"
-                   android:background="@drawable/top_back_2"
-                   android:layout_height="match_parent"/>
+        <RelativeLayout android:layout_width="155dp"
+                        android:layout_margin="15dp"
+                        android:layout_height="match_parent">
+            <ImageView android:layout_width="match_parent"
+                       android:id="@+id/top_rightList_video_bg"
+                       android:background="@drawable/top_back_3"
+                       android:layout_height="match_parent"/>
+            <TextView android:layout_width="match_parent"
+                      android:layout_margin="5dp"
+                      android:id="@+id/top_rightList_video_infor"
+                      android:textColor="#ffffff"
+                      android:textSize="15sp"
+                      android:text="娱乐视频"
+                      android:layout_height="wrap_content"/>
+        </RelativeLayout>
 
         <LinearLayout android:layout_width="match_parent"
                       android:orientation="vertical"
@@ -22,11 +33,12 @@
                           android:layout_height="match_parent">
                 <ImageView android:layout_width="45dp"
                            android:layout_gravity="center"
+                           android:id="@+id/top_rightList_userImage"
                            android:layout_margin="5dp"
                            android:background="@drawable/logo"
                            android:layout_height="45dp"/>
                 <TextView android:layout_width="match_parent"
-                          android:text="Gkpoter"
+                          android:text=""
                           android:id="@+id/top_rightList_username"
                           android:gravity="center_vertical"
                           android:textSize="25dp"
@@ -44,7 +56,7 @@
                            android:background="@drawable/top2"
                            android:layout_height="45dp"/>
                 <TextView android:layout_width="wrap_content"
-                          android:text="199"
+                          android:text=""
                           android:id="@+id/top_rightList_num"
                           android:layout_marginLeft="10dp"
                           android:layout_marginRight="15dp"
@@ -53,7 +65,8 @@
                           android:textColor="#0a82ff"
                           android:layout_height="match_parent"/>
                 <TextView android:layout_width="wrap_content"
-                          android:text="+"
+                          android:text=""
+                          android:id="@+id/top_rightList_num_state"
                           android:textSize="25dp"
                           android:gravity="center"
                           android:textColor="#0a82ff"

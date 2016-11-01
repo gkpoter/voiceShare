@@ -1,6 +1,10 @@
 package com.gkpoter.voiceShare.ui.Fragment;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,9 +20,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.model.MainVideoModel;
+import com.gkpoter.voiceShare.service.MainVideoService;
 import com.gkpoter.voiceShare.ui.MainVideoActivity;
 import com.gkpoter.voiceShare.ui.transformer.DepthPageTransformer;
 import com.gkpoter.voiceShare.ui.transformer.ZoomOutPageTransformer;
+import com.gkpoter.voiceShare.util.DataUtil;
+import com.gkpoter.voiceShare.util.PhotoCut;
+import com.loopj.android.http.RequestParams;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by dy on 2016/10/19.
@@ -32,6 +47,11 @@ public class TopFragment extends Fragment {
     private TextView leftText,rightText;
     private ViewFlipper viewFlipper;
 
+    private ImageView imageView1;
+    private ImageView imageView2;
+    private ImageView imageView3;
+    private MainVideoModel data;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_top, container, false);
@@ -43,7 +63,7 @@ public class TopFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         init();
         showPagerView();
-
+        getData();
     }
 
     private void init() {
@@ -88,19 +108,35 @@ public class TopFragment extends Fragment {
             @Override
             public void onPageScrollStateChanged(int i) {}
         });
+        leftText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                leftText.setAlpha((float) 1);
+                rightText.setAlpha((float) 0.5);
+                viewPager.setCurrentItem(0);
+            }
+        });
+        rightText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                leftText.setAlpha((float) 0.5);
+                rightText.setAlpha((float) 1.0);
+                viewPager.setCurrentItem(1);
+            }
+        });
 
         /**
         滚动top
          */
-        ImageView imageView1=new ImageView(getActivity());
-        ImageView imageView2=new ImageView(getActivity());
-        ImageView imageView3=new ImageView(getActivity());
-        imageView1.setBackgroundResource(R.drawable.top_back_1);
-        imageView2.setBackgroundResource(R.drawable.top_back_2);
-        imageView3.setBackgroundResource(R.drawable.top_back_3);
-        viewFlipper.addView(imageView1);
-        viewFlipper.addView(imageView2);
-        viewFlipper.addView(imageView3);
+        imageView1=new ImageView(getActivity());
+        imageView2=new ImageView(getActivity());
+        imageView3=new ImageView(getActivity());
+//        imageView1.setBackgroundResource(R.drawable.top_back_1);
+//        imageView2.setBackgroundResource(R.drawable.top_back_1);
+//        imageView3.setBackgroundResource(R.drawable.top_back_1);
+//        viewFlipper.addView(imageView1);
+//        viewFlipper.addView(imageView2);
+//        viewFlipper.addView(imageView3);
         nextView();
         topClick(imageView1,imageView2,imageView3);
     }
@@ -109,18 +145,39 @@ public class TopFragment extends Fragment {
         imageView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataUtil util=new DataUtil("video_data",getActivity());
+                util.clearData();
+                util.saveData("video_path",data.getVideoData().get(0).getVideoPath());
+                util.saveData("video_id",data.getVideoData().get(0).getVideoId()+"");
+                util.saveData("user_id",data.getUserData().get(0).getUserId()+"");
+                util.saveData("user_image",data.getUserData().get(0).getUserPhoto());
+                util.saveData("user_name",data.getUserData().get(0).getUserName());
                 startActivity(new Intent(getActivity(), MainVideoActivity.class));
             }
         });
         imageView2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataUtil util=new DataUtil("video_data",getActivity());
+                util.clearData();
+                util.saveData("video_path",data.getVideoData().get(1).getVideoPath());
+                util.saveData("video_id",data.getVideoData().get(1).getVideoId()+"");
+                util.saveData("user_id",data.getUserData().get(1).getUserId()+"");
+                util.saveData("user_image",data.getUserData().get(1).getUserPhoto());
+                util.saveData("user_name",data.getUserData().get(1).getUserName());
                 startActivity(new Intent(getActivity(), MainVideoActivity.class));
             }
         });
         imageView3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DataUtil util=new DataUtil("video_data",getActivity());
+                util.clearData();
+                util.saveData("video_path",data.getVideoData().get(2).getVideoPath());
+                util.saveData("video_id",data.getVideoData().get(2).getVideoId()+"");
+                util.saveData("user_id",data.getUserData().get(2).getUserId()+"");
+                util.saveData("user_image",data.getUserData().get(2).getUserPhoto());
+                util.saveData("user_name",data.getUserData().get(2).getUserName());
                 startActivity(new Intent(getActivity(), MainVideoActivity.class));
             }
         });
@@ -148,4 +205,70 @@ public class TopFragment extends Fragment {
             }
         }.start();
     }
+
+    private void getData() {
+        RequestParams params=new RequestParams();
+        params.put("VideoTop","third");
+        MainVideoService service=new MainVideoService();
+        service.get(getActivity(), "third", params, new Listener() {
+            @Override
+            public void onSuccess(Object object) {
+                data= (MainVideoModel) object;
+                try {
+                    new photoAsyncTask(imageView1).execute(data.getVideoData().get(0).getImagePath());
+                    new photoAsyncTask(imageView2).execute(data.getVideoData().get(1).getImagePath());
+                    new photoAsyncTask(imageView3).execute(data.getVideoData().get(2).getImagePath());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(getActivity(), msg+"", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
+
+        private ImageView imageView;
+
+        public photoAsyncTask(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String url=strings[0];
+            Bitmap bitmap=null;
+            URLConnection connection;
+            InputStream inputStream;
+            try {
+                connection=new URL(url).openConnection();
+                inputStream=connection.getInputStream();
+
+                bitmap= BitmapFactory.decodeStream(inputStream);
+
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            BitmapDrawable bd= new BitmapDrawable(bitmap);
+            this.imageView.setBackground(bd);
+            viewFlipper.addView(imageView);
+        }
+    }
+
 }
