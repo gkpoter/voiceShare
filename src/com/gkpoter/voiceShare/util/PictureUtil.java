@@ -34,7 +34,7 @@ public class PictureUtil {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
 
-        Bitmap bitmap = BitmapFactory.decodeFile(Path+"/"+name, options);
+        Bitmap bitmap;
         options.inJustDecodeBounds = false;
 
         int be = (int)(options.outHeight / (float)200);

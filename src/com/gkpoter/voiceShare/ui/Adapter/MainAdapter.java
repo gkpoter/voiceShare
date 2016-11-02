@@ -77,8 +77,17 @@ public class MainAdapter extends BaseAdapter {
         }
         touchClick(view,i);
 
-        new photoAsyncTask(viewHolder.imageView,false).execute(data.getVideoData().get(i).getImagePath());
-        new photoAsyncTask(viewHolder.userImage,true).execute(data.getUserData().get(i).getUserPhoto());
+        if(viewHolder.image_bitmap==null){
+            new photoAsyncTask(viewHolder.imageView,viewHolder,false).execute(data.getVideoData().get(i).getImagePath());
+        }else{
+            BitmapDrawable bd= new BitmapDrawable(viewHolder.image_bitmap);
+            viewHolder.imageView.setBackground(bd);
+        }
+        if(viewHolder.user_bitmap==null) {
+            new photoAsyncTask(viewHolder.userImage, viewHolder, true).execute(data.getUserData().get(i).getUserPhoto());
+        }else{
+            viewHolder.userImage.setImageBitmap(PhotoCut.toRoundBitmap(viewHolder.user_bitmap));
+        }
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
 
@@ -117,16 +126,19 @@ public class MainAdapter extends BaseAdapter {
     public class ViewHolder{
         public ImageView imageView,userImage;
         public TextView videoTitle,userName;
-        private RelativeLayout layout;
-        private VideoView videoView;
+        public RelativeLayout layout;
+        public VideoView videoView;
+        public Bitmap user_bitmap,image_bitmap;
     }
 
     class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
 
+        private ViewHolder viewHolder;
         private ImageView imageView;
         private boolean key;
-        public photoAsyncTask(ImageView imageView,boolean key) {
+        public photoAsyncTask(ImageView imageView,ViewHolder viewHolder,boolean key) {
             this.imageView=imageView;
+            this.viewHolder=viewHolder;
             this.key=key;
         }
 
@@ -158,8 +170,10 @@ public class MainAdapter extends BaseAdapter {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             if(key) {
+                viewHolder.user_bitmap=bitmap;
                 this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
             }else{
+                viewHolder.image_bitmap=bitmap;
                 BitmapDrawable bd= new BitmapDrawable(bitmap);
                 this.imageView.setBackground(bd);
             }

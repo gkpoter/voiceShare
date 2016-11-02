@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <ImageView android:layout_width="match_parent"
-               android:background="@drawable/userself_bg"
+               android:id="@+id/userself_bg_image"
                android:layout_height="215dp"/>
 
     <ImageView android:layout_width="40dp"
@@ -24,7 +24,7 @@
                   android:layout_height="100dp">
 
         <ImageView android:layout_width="90dp"
-                   android:background="@drawable/userimage"
+                   android:id="@+id/userself_user_image"
                    android:layout_margin="10dp"
                    android:layout_height="match_parent"/>
 
@@ -38,7 +38,7 @@
                           android:orientation="horizontal"
                           android:layout_height="match_parent">
                 <TextView android:layout_width="match_parent"
-                          android:text="258人已关注"
+                          android:id="@+id/userself_user_focuse"
                           android:layout_weight="1"
                           android:gravity="center_vertical"
                           android:textColor="#353535"

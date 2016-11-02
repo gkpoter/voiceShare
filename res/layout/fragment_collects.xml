@@ -36,7 +36,7 @@
                   android:layout_height="75dp">
         <ImageView android:layout_width="65dp"
                    android:layout_margin="10dp"
-                   android:background="@drawable/userimage"
+                   android:id="@+id/collects_main_userImage"
                    android:layout_height="match_parent"/>
 
         <LinearLayout android:layout_width="match_parent"
@@ -50,12 +50,14 @@
                           android:layout_height="match_parent">
                 <TextView android:layout_width="match_parent"
                           android:gravity="center_vertical"
+                          android:id="@+id/collects_main_userName"
                           android:textColor="#5a5a5a"
                           android:layout_weight="1"
                           android:text="Gkpoter"
                           android:layout_height="match_parent"/>
                 <TextView android:layout_width="match_parent"
                           android:gravity="center"
+                          android:id="@+id/collects_main_userFocus"
                           android:textColor="#1f1f1f"
                           android:layout_weight="1"
                           android:text="989人已关注"
@@ -69,6 +71,7 @@
                           android:layout_height="match_parent">
                 <TextView android:layout_width="match_parent"
                           android:gravity="center_vertical"
+                          android:id="@+id/collects_main_userSignature"
                           android:textColor="#1f1f1f"
                           android:text="评论区请禁止评论评论区请禁止评论"
                           android:layout_height="match_parent"/>
