@@ -82,8 +82,14 @@ public class TopRightAdapter extends BaseAdapter {
         }else{
             viewHolder.numstate.setText("-");
         }
-        new photoAsyncTask(viewHolder.imageView,false).execute(data.getVideoData().get(i).getImagePath());
-        new photoAsyncTask(viewHolder.userImage,true).execute(data.getUserData().get(i).getUserPhoto());
+        if(viewHolder.image_bitmap==null){
+            new photoAsyncTask(viewHolder.imageView,viewHolder,false).execute(data.getVideoData().get(i).getImagePath());
+        }else{
+            BitmapDrawable bd= new BitmapDrawable(viewHolder.image_bitmap);
+            viewHolder.imageView.setBackground(bd);
+        }
+//        new photoAsyncTask(viewHolder.imageView,false).execute(data.getVideoData().get(i).getImagePath());
+        new photoAsyncTask(viewHolder.userImage,viewHolder,true).execute(data.getUserData().get(i).getUserPhoto());
         return view;
     }
 
@@ -91,13 +97,16 @@ public class TopRightAdapter extends BaseAdapter {
         public LinearLayout layout;
         public ImageView imageView,userImage;
         public TextView num,userName,numstate,video_infor;
+        public Bitmap image_bitmap;
     }
 
     class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
 
+        private ViewHolder viewHolder;
         private ImageView imageView;
         private boolean key;
-        public photoAsyncTask(ImageView imageView,boolean key) {
+        public photoAsyncTask(ImageView imageView,ViewHolder viewHolder,boolean key) {
+            this.viewHolder=viewHolder;
             this.imageView=imageView;
             this.key=key;
         }
@@ -132,6 +141,7 @@ public class TopRightAdapter extends BaseAdapter {
             if(key) {
                 this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
             }else{
+                viewHolder.image_bitmap=bitmap;
                 BitmapDrawable bd= new BitmapDrawable(bitmap);
                 this.imageView.setBackground(bd);
             }

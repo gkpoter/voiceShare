@@ -83,11 +83,11 @@ public class MainAdapter extends BaseAdapter {
             BitmapDrawable bd= new BitmapDrawable(viewHolder.image_bitmap);
             viewHolder.imageView.setBackground(bd);
         }
-        if(viewHolder.user_bitmap==null) {
+//        if(viewHolder.user_bitmap==null) {
             new photoAsyncTask(viewHolder.userImage, viewHolder, true).execute(data.getUserData().get(i).getUserPhoto());
-        }else{
-            viewHolder.userImage.setImageBitmap(PhotoCut.toRoundBitmap(viewHolder.user_bitmap));
-        }
+//        }else{
+//            viewHolder.userImage.setImageBitmap(PhotoCut.toRoundBitmap(viewHolder.user_bitmap));
+//        }
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
 
