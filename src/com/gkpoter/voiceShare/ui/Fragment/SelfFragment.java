@@ -68,6 +68,18 @@ public class SelfFragment extends Fragment implements OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.self_user_main:
+                DataUtil util = new DataUtil("user", getActivity());
+                DataUtil util_=new DataUtil("user_focus",getActivity());
+                util_.clearData();
+                util_.saveData("user_id",util.getData("user_id","")+"");
+                util_.saveData("user_name",util.getData("user_name","")+"");
+                util_.saveData("user_photo",util.getData("user_photo","")+"");
+                util_.saveData("user_signature",util.getData("user_signature","")+"");
+                util_.saveData("user_selfbackgroung",util.getData("user_selfbackgroung","")+"");
+                util_.saveData("user_focus",util.getData("user_focus","")+"");
+                util_.saveData("user_vip",util.getData("user_vip","")+"");
+                util_.saveData("user_logday",util.getData("user_logday","")+"");
+                util_.saveData("user_level",util.getData("user_level","")+"");
                 startActivity(new Intent(getActivity(), UserActivity.class));
                 break;
             case R.id.self_to_about:

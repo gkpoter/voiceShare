@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,9 @@ import com.gkpoter.voiceShare.model.MainVideoModel;
 import com.gkpoter.voiceShare.ui.MainVideoActivity;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
+import com.gkpoter.voiceShare.util.PictureUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -29,6 +32,7 @@ public class MainAdapter extends BaseAdapter {
 
     private MainVideoModel data;
     private Context context;
+    private PictureUtil pictureUtil=new PictureUtil();
 
     public void setData(MainVideoModel data) {
         this.data = data;
@@ -77,17 +81,21 @@ public class MainAdapter extends BaseAdapter {
         }
         touchClick(view,i);
 
-        if(viewHolder.image_bitmap==null){
-            new photoAsyncTask(viewHolder.imageView,viewHolder,false).execute(data.getVideoData().get(i).getImagePath());
-        }else{
-            BitmapDrawable bd= new BitmapDrawable(viewHolder.image_bitmap);
+        Bitmap bitmap = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", (data.getVideoData().get(i).getImagePath()).replaceAll("/","_"));
+        if (bitmap == null) {
+            new photoAsyncTask(viewHolder.imageView,viewHolder,i,false).execute(data.getVideoData().get(i).getImagePath());
+        } else {
+            BitmapDrawable bd= new BitmapDrawable(bitmap);
             viewHolder.imageView.setBackground(bd);
         }
-//        if(viewHolder.user_bitmap==null) {
-            new photoAsyncTask(viewHolder.userImage, viewHolder, true).execute(data.getUserData().get(i).getUserPhoto());
-//        }else{
-//            viewHolder.userImage.setImageBitmap(PhotoCut.toRoundBitmap(viewHolder.user_bitmap));
-//        }
+        Bitmap bitmap_ = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", data.getUserData().get(i).getUserName());
+        if (bitmap_ == null) {
+            new photoAsyncTask(viewHolder.userImage, viewHolder,i, true).execute(data.getUserData().get(i).getUserPhoto());
+        } else {
+            BitmapDrawable bd= new BitmapDrawable(bitmap_);
+            viewHolder.userImage.setBackground(bd);
+        }
+
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
 
@@ -128,7 +136,6 @@ public class MainAdapter extends BaseAdapter {
         public TextView videoTitle,userName;
         public RelativeLayout layout;
         public VideoView videoView;
-        public Bitmap user_bitmap,image_bitmap;
     }
 
     class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
@@ -136,10 +143,12 @@ public class MainAdapter extends BaseAdapter {
         private ViewHolder viewHolder;
         private ImageView imageView;
         private boolean key;
-        public photoAsyncTask(ImageView imageView,ViewHolder viewHolder,boolean key) {
+        private int i;
+        public photoAsyncTask(ImageView imageView,ViewHolder viewHolder,int i,boolean key) {
             this.imageView=imageView;
             this.viewHolder=viewHolder;
             this.key=key;
+            this.i=i;
         }
 
         @Override
@@ -170,10 +179,26 @@ public class MainAdapter extends BaseAdapter {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             if(key) {
-                viewHolder.user_bitmap=bitmap;
+                File file=new File(Environment.getExternalStorageDirectory().getPath()+"/voiceshare");
+                if(!file.isFile()){
+                    try {
+                        file.mkdirs();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                pictureUtil.savePicture(bitmap,Environment.getExternalStorageDirectory().getPath()+"/voiceshare",data.getUserData().get(i).getUserName());
                 this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
             }else{
-                viewHolder.image_bitmap=bitmap;
+                File file=new File(Environment.getExternalStorageDirectory().getPath()+"/voiceshare");
+                if(!file.exists()){
+                    try {
+                        file.mkdirs();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                pictureUtil.savePicture(bitmap,Environment.getExternalStorageDirectory().getPath()+"/voiceshare",(data.getVideoData().get(i).getImagePath()).replaceAll("/","_"));
                 BitmapDrawable bd= new BitmapDrawable(bitmap);
                 this.imageView.setBackground(bd);
             }

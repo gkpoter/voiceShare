@@ -32,7 +32,6 @@ public class UserAdapter extends BaseAdapter {
     private VideoModel data;
     private Context context;
     private PictureUtil pictureUtil;
-    private DataUtil util;
 
     public UserAdapter(VideoModel data,Context context){
         this.data=data;
@@ -56,7 +55,6 @@ public class UserAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        util = new DataUtil("user_focus", context);
         pictureUtil = new PictureUtil();
         ViewHolder viewHolder = null;
         if (view == null){
@@ -70,14 +68,14 @@ public class UserAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        Bitmap bitmap = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", util.getData("user_name", "")+"_voiceShare_user_video_bg");
+        Bitmap bitmap = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", (data.getVideoData().get(i).getImagePath()).replaceAll("/","_"));
         if (bitmap == null) {
-            new photoAsyncTask(viewHolder.image_bg).execute(util.getData("user_selfbackgroung", ""));
+            new photoAsyncTask(viewHolder.image_bg,i).execute(data.getVideoData().get(i).getImagePath());
         } else {
             BitmapDrawable bd= new BitmapDrawable(bitmap);
             viewHolder.image_bg.setBackground(bd);
         }
-        viewHolder.star_num.setText(data.getVideoData().get(i).getVideoYearTop());
+        viewHolder.star_num.setText(data.getVideoData().get(i).getVideoYearTop()+"");
         if(data.getVideoData().get(i).getStarState()) {
             viewHolder.star_state.setText("+");
         }else{
@@ -96,12 +94,12 @@ public class UserAdapter extends BaseAdapter {
         private ImageView imageView;
         private boolean key;
         private PictureUtil pictureUtil;
-        private DataUtil util;
-        public photoAsyncTask(ImageView imageView) {
+        private int i;
+        public photoAsyncTask(ImageView imageView, int i) {
             this.imageView=imageView;
             this.key=false;
-            util=new DataUtil("user_focus",context);
             pictureUtil = new PictureUtil();
+            this.i=i;
         }
 
         @Override
@@ -111,18 +109,17 @@ public class UserAdapter extends BaseAdapter {
 
         @Override
         protected Bitmap doInBackground(String... strings) {
-            String url=strings[0];
+            String url = strings[0];
             Bitmap bitmap=null;
-            URLConnection connection;
-            InputStream inputStream;
+            URLConnection connection = null;
+            InputStream inputStream = null;
             try {
-                connection=new URL(url).openConnection();
-                inputStream=connection.getInputStream();
-
+                connection = new URL(url).openConnection();
+                inputStream = connection.getInputStream();
                 bitmap= BitmapFactory.decodeStream(inputStream);
 
                 inputStream.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return bitmap;
@@ -132,14 +129,14 @@ public class UserAdapter extends BaseAdapter {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             File file=new File(Environment.getExternalStorageDirectory().getPath()+"/voiceshare");
-            if(!file.isFile()){
+            if(!file.exists()){
                 try {
                     file.mkdirs();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            pictureUtil.savePicture(bitmap,Environment.getExternalStorageDirectory().getPath()+"/voiceshare",util.getData("user_name","")+"_voiceShare_user_video_bg");
+            pictureUtil.savePicture(bitmap,Environment.getExternalStorageDirectory().getPath()+"/voiceshare",(data.getVideoData().get(i).getImagePath()).replaceAll("/","_"));
             if(key) {
                 this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
             }else{

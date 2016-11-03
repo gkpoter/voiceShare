@@ -14,9 +14,9 @@
                    android:layout_height="50dp"/>
         <TextView android:layout_width="match_parent"
                   android:textSize="20sp"
-                  android:textColor="#373737"
+                  android:textColor="#616161"
                   android:layout_marginTop="15dp"
-                  android:text="        voiceShare第一版正在进行中，欢迎第二版voiceShare第一版正在进行中，欢迎第二版"
+                  android:text="        voiceShare 1.0，看你自己的视频，听你自己的声音。敬请期待voiceShare 2.0 为您带来钱新体验。"
                   android:layout_height="wrap_content"/>
     </LinearLayout>
 

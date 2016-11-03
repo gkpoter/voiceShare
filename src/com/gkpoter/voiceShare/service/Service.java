@@ -36,34 +36,4 @@ public class Service {
         });
     }
 
-    public void upVideoPost(Context context, String url, RequestParams params, ProgressBar progressBar, RelativeLayout layout,RelativeLayout layout_show ,Listener listener) {
-        HttpRequest.post(context, url, params, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                Model model=new Gson().fromJson(new String(bytes),Model.class);
-                if(new Integer(1).equals(model.getState())){
-                    listener.onSuccess(model);
-                }else{
-                    listener.onError(model.getMsg());
-                }
-            }
-
-            @Override
-            public void onFailure(int i, Header[] headers, byte[] bytes, Throwable throwable) {
-                listener.onError("网络请求失败");
-            }
-
-            @Override
-            public void onProgress(long bytesWritten, long totalSize) {
-                super.onProgress(bytesWritten, totalSize);
-                int count = (int) ((bytesWritten * 1.0 / totalSize) * 100);
-                progressBar.setProgress(count);
-                if(count == 1){
-                    layout_show.setVisibility(View.VISIBLE);
-                    layout.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
-
 }

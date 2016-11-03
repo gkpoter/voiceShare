@@ -204,7 +204,7 @@ public class CollectsFragment extends Fragment {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             File file=new File(Environment.getExternalStorageDirectory().getPath()+"/voiceshare");
-            if(!file.isFile()){
+            if(!file.exists()){
                 try {
                     file.mkdirs();
                 } catch (Exception e) {

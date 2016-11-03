@@ -37,7 +37,7 @@ public class InformationActivity extends Activity {
         });
         listView= (ListView) findViewById(R.id.information_listView);
         data=new ArrayList<>();
-        for(int i=0;i<10;i++) data.add(i+"");
+        for(int i=0;i<1;i++) data.add(i+"");
         adapter=new InformationAdapter(data,getApplicationContext());
         listView.setAdapter(adapter);
     }

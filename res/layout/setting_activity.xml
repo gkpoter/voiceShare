@@ -32,6 +32,40 @@
 
     <RelativeLayout android:layout_width="match_parent"
                     android:clickable="true"
+                    android:id="@+id/delete_"
+                    android:background="@drawable/collects_listview_bg"
+                    android:layout_height="55dp">
+        <ImageView android:layout_width="55dp"
+                   android:src="@drawable/delete_"
+                   android:layout_marginLeft="5dp"
+                   android:layout_marginTop="10dp"
+                   android:layout_marginBottom="10dp"
+                   android:layout_marginRight="5dp"
+                   android:layout_height="match_parent"
+                   android:id="@+id/setting_logout_im_"/>
+        <TextView android:layout_width="wrap_content"
+                  android:text="清空缓存"
+                  android:textSize="15dp"
+                  android:gravity="center"
+                  android:textColor="#3d3d3d"
+                  android:layout_height="match_parent"
+                  android:layout_toEndOf="@+id/setting_logout_im_"/>
+        <TextView android:layout_width="wrap_content"
+                  android:id="@+id/delete_text"
+                  android:gravity="center"
+                  android:text="6.75 M"
+                  android:textColor="#848484"
+                  android:textSize="15sp"
+                   android:layout_marginRight="25dp"
+                   android:layout_marginTop="15dp"
+                   android:layout_marginBottom="15dp"
+                   android:layout_height="match_parent"
+                   android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <TextView android:layout_width="match_parent" android:layout_height="10dp"/>
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:clickable="true"
                     android:id="@+id/setting_logout"
                     android:background="@drawable/collects_listview_bg"
                     android:layout_height="55dp">
