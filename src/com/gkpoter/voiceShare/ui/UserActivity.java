@@ -11,11 +11,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.model.VideoModel;
+import com.gkpoter.voiceShare.service.VideoService;
 import com.gkpoter.voiceShare.ui.Adapter.UserAdapter;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
 import com.gkpoter.voiceShare.util.PictureUtil;
+import com.loopj.android.http.RequestParams;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,12 +38,23 @@ public class UserActivity extends Activity {
     private ImageView backtoCollects;
     private ImageView image_bg,image_user;
     private TextView focus;
-    private List<String> data;
+    private VideoModel data;
     private ListView listView;
     private UserAdapter adapter;
 
     private DataUtil util;
     private PictureUtil pictureUtil;
+
+    private interface CallBack{
+        public void back();
+    }
+    private CallBack call=new CallBack() {
+        @Override
+        public void back() {
+            adapter=new UserAdapter(data,getApplication());
+            listView.setAdapter(adapter);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +63,7 @@ public class UserActivity extends Activity {
 
         init();
         backCollects();
+        getData();
     }
 
     private void backCollects() {
@@ -66,10 +83,7 @@ public class UserActivity extends Activity {
 
         backtoCollects= (ImageView) findViewById(R.id.user_main_back);
         listView= (ListView) findViewById(R.id.user_main_listView);
-        data=new ArrayList<>();
-        for(int i=0;i<10;i++) data.add(i+"");
-        adapter=new UserAdapter(data,getApplicationContext());
-        listView.setAdapter(adapter);
+
     }
 
     private void initView() {
@@ -90,6 +104,24 @@ public class UserActivity extends Activity {
             image_bg.setBackground(bd);
         }
         focus.setText(util.getData("user_focus","")+" 人已关注");
+    }
+
+    public void getData(){
+        VideoService service=new VideoService();
+        RequestParams params=new RequestParams();
+        params.put("UserId",util.getData("user_id",""));
+        service.post(getApplicationContext(), "user_video", params, new Listener() {
+            @Override
+            public void onSuccess(Object object) {
+                data = (VideoModel) object;
+                call.back();
+            }
+
+            @Override
+            public void onError(String msg) {
+                Toast.makeText(getApplicationContext(),msg + "", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
