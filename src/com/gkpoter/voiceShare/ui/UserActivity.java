@@ -9,10 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
 import com.gkpoter.voiceShare.model.VideoModel;
@@ -39,10 +36,11 @@ public class UserActivity extends Activity {
 
     private ImageView backtoCollects;
     private ImageView image_bg,image_user;
-    private TextView focus;
+    private TextView focus,say;
     private VideoModel data;
     private PullToRefreshListView listView;
     private UserAdapter adapter;
+    private Button bt;
 
     private DataUtil util;
     private PictureUtil pictureUtil;
@@ -78,9 +76,11 @@ public class UserActivity extends Activity {
     }
 
     private void init() {
+        say= (TextView) findViewById(R.id.userself_user_say);
         image_bg= (ImageView) findViewById(R.id.userself_bg_image);
         image_user= (ImageView) findViewById(R.id.userself_user_image);
         focus= (TextView) findViewById(R.id.userself_user_focuse);
+        bt= (Button) findViewById(R.id.userself_user_focuse_bt);
         initView();
 
         backtoCollects= (ImageView) findViewById(R.id.user_main_back);
@@ -90,6 +90,10 @@ public class UserActivity extends Activity {
 
     private void initView() {
         util=new DataUtil("user_focus",getApplication());
+        DataUtil util_=new DataUtil("user",getApplication());
+        if(util.getData("user_id","").equals(util_.getData("user_id",""))){
+            bt.setVisibility(View.GONE);
+        }
         pictureUtil = new PictureUtil();
         Bitmap bitmap = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", util.getData("user_name", "")+"_voiceShare");
         if (bitmap == null) {
@@ -106,6 +110,7 @@ public class UserActivity extends Activity {
             image_bg.setBackground(bd);
         }
         focus.setText(util.getData("user_focus","")+" 人已关注");
+        say.setText(util.getData("user_signature",""));
     }
 
     public void getData(){

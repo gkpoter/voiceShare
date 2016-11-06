@@ -15,6 +15,7 @@ import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.model.MainVideoModel;
 import com.gkpoter.voiceShare.ui.AdapterUtil.ImageLoader;
 import com.gkpoter.voiceShare.ui.MainVideoActivity;
+import com.gkpoter.voiceShare.ui.UserActivity;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -96,6 +97,23 @@ public class MainAdapter extends BaseAdapter implements AbsListView.OnScrollList
         viewHolder.imageView.setTag(URLS[i]+i);
         mImageLoader.showImage(viewHolder.imageView,URLS[i]);
         viewHolder.userImage.setTag(URLS_[i]+i);
+        viewHolder.userImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DataUtil util_=new DataUtil("user_focus",context);
+                util_.clearData();
+                util_.saveData("user_id",data.getUserData().get(i).getUserId()+"");
+                util_.saveData("user_name",data.getUserData().get(i).getUserName()+"");
+                util_.saveData("user_photo",data.getUserData().get(i).getUserPhoto()+"");
+                util_.saveData("user_signature",data.getUserData().get(i).getSignature()+"");
+                util_.saveData("user_selfbackgroung",data.getUserData().get(i).getSelfBackgroung()+"");
+                util_.saveData("user_focus",data.getUserData().get(i).getFocus()+"");
+                util_.saveData("user_vip",data.getUserData().get(i).getVip()+"");
+                util_.saveData("user_logday",data.getUserData().get(i).getLogDay()+"");
+                util_.saveData("user_level",data.getUserData().get(i).getLevel()+"");
+                context.startActivity(new Intent(context, UserActivity.class));
+            }
+        });
         userImageloader.showImage(viewHolder.userImage,URLS_[i]);
 
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
