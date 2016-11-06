@@ -53,11 +53,12 @@
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-        <ListView android:layout_width="match_parent"
+        <com.handmark.pulltorefresh.library.PullToRefreshListView
+                android:layout_width="match_parent"
                   android:id="@+id/video_main_newsList"
                   android:layout_above="@+id/video_main_bottom"
                   android:layout_height="match_parent">
-        </ListView>
+        </com.handmark.pulltorefresh.library.PullToRefreshListView>
 
         <LinearLayout android:layout_width="match_parent"
                       android:orientation="horizontal"

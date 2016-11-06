@@ -7,19 +7,18 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.model.MainVideoModel;
+import com.gkpoter.voiceShare.ui.AdapterUtil.ImageLoader;
 import com.gkpoter.voiceShare.ui.MainVideoActivity;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
-import com.gkpoter.voiceShare.util.PictureUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -28,19 +27,32 @@ import java.net.URLConnection;
 /**
  * Created by dy on 2016/10/19.
  */
-public class MainAdapter extends BaseAdapter {
+public class MainAdapter extends BaseAdapter implements AbsListView.OnScrollListener{
 
+    private int mStart, mEnd;
     private MainVideoModel data;
     private Context context;
-    private PictureUtil pictureUtil=new PictureUtil();
+    public boolean mFirstIn;
+    private static String [] URLS,URLS_;
+    private ImageLoader mImageLoader,userImageloader;
 
     public void setData(MainVideoModel data) {
         this.data = data;
     }
 
-    public MainAdapter(MainVideoModel data, Context context){
+    public MainAdapter(MainVideoModel data, Context context, PullToRefreshListView listView){
         this.data=data;
         this.context=context;
+        URLS = new String[data.getVideoData().size()];
+        URLS_ = new String[data.getUserData().size()];
+        for (int i =0;i<data.getVideoData().size();i++){
+            URLS[i]=data.getVideoData().get(i).getImagePath();
+            URLS_[i]=data.getUserData().get(i).getUserPhoto();
+        }
+        mImageLoader = new ImageLoader(listView,false);
+        userImageloader = new ImageLoader(listView,true);
+        mFirstIn = true;
+        listView.setOnScrollListener(this);
     }
 
     @Override
@@ -81,20 +93,10 @@ public class MainAdapter extends BaseAdapter {
         }
         touchClick(view,i);
 
-        Bitmap bitmap = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", (data.getVideoData().get(i).getImagePath()).replaceAll("/","_"));
-        if (bitmap == null) {
-            new photoAsyncTask(viewHolder.imageView,viewHolder,i,false).execute(data.getVideoData().get(i).getImagePath());
-        } else {
-            BitmapDrawable bd= new BitmapDrawable(bitmap);
-            viewHolder.imageView.setBackground(bd);
-        }
-        Bitmap bitmap_ = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", data.getUserData().get(i).getUserName());
-        if (bitmap_ == null) {
-            new photoAsyncTask(viewHolder.userImage, viewHolder,i, true).execute(data.getUserData().get(i).getUserPhoto());
-        } else {
-            BitmapDrawable bd= new BitmapDrawable(bitmap_);
-            viewHolder.userImage.setBackground(bd);
-        }
+        viewHolder.imageView.setTag(URLS[i]+i);
+        mImageLoader.showImage(viewHolder.imageView,URLS[i]);
+        viewHolder.userImage.setTag(URLS_[i]+i);
+        userImageloader.showImage(viewHolder.userImage,URLS_[i]);
 
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
@@ -131,78 +133,37 @@ public class MainAdapter extends BaseAdapter {
         });
     }
 
+    @Override
+    public void onScrollStateChanged(AbsListView arg0, int scrollState) {
+        // TODO Auto-generated method stub
+
+        if (scrollState == SCROLL_STATE_IDLE) {
+            mImageLoader.loadImages(mStart, mEnd,URLS);
+            userImageloader.loadImages(mStart, mEnd,URLS_);
+        } else {
+            mImageLoader.cancelAllTasks();
+            userImageloader.cancelAllTasks();
+        }
+    }
+
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int arg3) {
+        // TODO Auto-generated method stub
+        mStart = firstVisibleItem;
+        mEnd = Math.min(firstVisibleItem + visibleItemCount,data.getVideoData().size());
+
+        if (mFirstIn && visibleItemCount > 0) {
+            mImageLoader.loadImages(mStart, mEnd,URLS);
+            userImageloader.loadImages(mStart, mEnd,URLS_);
+            mFirstIn = false;
+        }
+    }
+
     public class ViewHolder{
         public ImageView imageView,userImage;
         public TextView videoTitle,userName;
         public RelativeLayout layout;
         public VideoView videoView;
     }
-
-    class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
-
-        private ViewHolder viewHolder;
-        private ImageView imageView;
-        private boolean key;
-        private int i;
-        public photoAsyncTask(ImageView imageView,ViewHolder viewHolder,int i,boolean key) {
-            this.imageView=imageView;
-            this.viewHolder=viewHolder;
-            this.key=key;
-            this.i=i;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            String url=strings[0];
-            Bitmap bitmap=null;
-            URLConnection connection;
-            InputStream inputStream;
-            try {
-                connection=new URL(url).openConnection();
-                inputStream=connection.getInputStream();
-
-                bitmap= BitmapFactory.decodeStream(inputStream);
-
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if(key) {
-                File file=new File(Environment.getExternalStorageDirectory().getPath()+"/voiceshare");
-                if(!file.isFile()){
-                    try {
-                        file.mkdirs();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                pictureUtil.savePicture(bitmap,Environment.getExternalStorageDirectory().getPath()+"/voiceshare",data.getUserData().get(i).getUserName());
-                this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
-            }else{
-                File file=new File(Environment.getExternalStorageDirectory().getPath()+"/voiceshare");
-                if(!file.exists()){
-                    try {
-                        file.mkdirs();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                pictureUtil.savePicture(bitmap,Environment.getExternalStorageDirectory().getPath()+"/voiceshare",(data.getVideoData().get(i).getImagePath()).replaceAll("/","_"));
-                BitmapDrawable bd= new BitmapDrawable(bitmap);
-                this.imageView.setBackground(bd);
-            }
-        }
-    }
-
 }

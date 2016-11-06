@@ -39,7 +39,7 @@ public class TopFragmentLeft extends Fragment {
         @Override
         public void back() {
             if(FrishKey) {
-                adapter=new TopLeftAdapter(data,getActivity());
+                adapter=new TopLeftAdapter(data,getActivity(),listView);
                 listView.setAdapter(adapter);
                 listView.onRefreshComplete();
                 FrishKey=false;

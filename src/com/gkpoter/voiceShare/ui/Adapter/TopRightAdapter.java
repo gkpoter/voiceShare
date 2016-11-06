@@ -9,13 +9,12 @@ import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.model.MainVideoModel;
+import com.gkpoter.voiceShare.ui.AdapterUtil.ImageLoader;
 import com.gkpoter.voiceShare.util.PhotoCut;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,17 +25,33 @@ import java.util.List;
 /**
  * Created by dy on 2016/10/21.
  */
-public class TopRightAdapter extends BaseAdapter {
+public class TopRightAdapter extends BaseAdapter implements AbsListView.OnScrollListener {
     private MainVideoModel data;
     private Context context;
+
+    private int mStart, mEnd;
+    public boolean mFirstIn;
+    private static String [] URLS,URLS_;
+    private ImageLoader mImageLoader,userImageloader;
 
     public void setData(MainVideoModel data) {
         this.data = data;
     }
 
-    public TopRightAdapter(MainVideoModel data, Context context){
+    public TopRightAdapter(MainVideoModel data, Context context, PullToRefreshListView listView){
         this.data=data;
         this.context=context;
+
+        URLS = new String[data.getVideoData().size()];
+        URLS_ = new String[data.getUserData().size()];
+        for (int i =0;i<data.getVideoData().size();i++){
+            URLS[i]=data.getVideoData().get(i).getImagePath();
+            URLS_[i]=data.getUserData().get(i).getUserPhoto();
+        }
+        mImageLoader = new ImageLoader(listView,false);
+        userImageloader = new ImageLoader(listView,true);
+        mFirstIn = true;
+        listView.setOnScrollListener(this);
     }
 
     @Override
@@ -82,69 +97,45 @@ public class TopRightAdapter extends BaseAdapter {
         }else{
             viewHolder.numstate.setText("-");
         }
-        if(viewHolder.image_bitmap==null){
-            new photoAsyncTask(viewHolder.imageView,viewHolder,false).execute(data.getVideoData().get(i).getImagePath());
-        }else{
-            BitmapDrawable bd= new BitmapDrawable(viewHolder.image_bitmap);
-            viewHolder.imageView.setBackground(bd);
-        }
-//        new photoAsyncTask(viewHolder.imageView,false).execute(data.getVideoData().get(i).getImagePath());
-        new photoAsyncTask(viewHolder.userImage,viewHolder,true).execute(data.getUserData().get(i).getUserPhoto());
+
+        viewHolder.imageView.setTag(URLS[i]+i);
+        mImageLoader.showImage(viewHolder.imageView,URLS[i]);
+        viewHolder.userImage.setTag(URLS_[i]+i);
+        userImageloader.showImage(viewHolder.userImage,URLS_[i]);
+
         return view;
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView arg0, int scrollState) {
+        // TODO Auto-generated method stub
+
+        if (scrollState == SCROLL_STATE_IDLE) {
+            mImageLoader.loadImages(mStart, mEnd,URLS);
+            userImageloader.loadImages(mStart, mEnd,URLS_);
+        } else {
+            mImageLoader.cancelAllTasks();
+            userImageloader.cancelAllTasks();
+        }
+    }
+
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int arg3) {
+        // TODO Auto-generated method stub
+        mStart = firstVisibleItem;
+        mEnd = Math.min(firstVisibleItem + visibleItemCount,data.getVideoData().size());
+
+        if (mFirstIn && visibleItemCount > 0) {
+            mImageLoader.loadImages(mStart, mEnd,URLS);
+            userImageloader.loadImages(mStart, mEnd,URLS_);
+            mFirstIn = false;
+        }
     }
 
     public class ViewHolder{
         public LinearLayout layout;
         public ImageView imageView,userImage;
         public TextView num,userName,numstate,video_infor;
-        public Bitmap image_bitmap;
-    }
-
-    class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
-
-        private ViewHolder viewHolder;
-        private ImageView imageView;
-        private boolean key;
-        public photoAsyncTask(ImageView imageView,ViewHolder viewHolder,boolean key) {
-            this.viewHolder=viewHolder;
-            this.imageView=imageView;
-            this.key=key;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            String url=strings[0];
-            Bitmap bitmap=null;
-            URLConnection connection;
-            InputStream inputStream;
-            try {
-                connection=new URL(url).openConnection();
-                inputStream=connection.getInputStream();
-
-                bitmap= BitmapFactory.decodeStream(inputStream);
-
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            if(key) {
-                this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
-            }else{
-                viewHolder.image_bitmap=bitmap;
-                BitmapDrawable bd= new BitmapDrawable(bitmap);
-                this.imageView.setBackground(bd);
-            }
-        }
     }
 }

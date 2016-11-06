@@ -26,7 +26,7 @@ public class MainSearchActivity extends Activity {
     private Button search_bt;
     private EditText search_edit;
 
-    private ListView listView;
+    private PullToRefreshListView listView;
     private MainAdapter adapter;
     private MainVideoModel data;
     private boolean FrishKey=true;
@@ -39,7 +39,7 @@ public class MainSearchActivity extends Activity {
         @Override
         public void onBack() {
             if(FrishKey) {
-                adapter = new MainAdapter(data, MainSearchActivity.this);
+                adapter = new MainAdapter(data, MainSearchActivity.this,listView);
                 listView.setAdapter(adapter);
                 FrishKey=false;
             }else{
@@ -59,7 +59,7 @@ public class MainSearchActivity extends Activity {
     }
 
     private void init() {
-        listView= (ListView)findViewById(R.id.listView_main_search);
+        listView= (PullToRefreshListView)findViewById(R.id.listView_main_search);
         back_left= (Button) findViewById(R.id.search_back);
         search_edit= (EditText) findViewById(R.id.search_edit_data);
         search_bt= (Button) findViewById(R.id.search_ok);

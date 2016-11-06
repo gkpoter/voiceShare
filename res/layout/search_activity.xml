@@ -43,7 +43,8 @@
 
     </LinearLayout>
 
-    <ListView android:id="@+id/listView_main_search"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+            android:id="@+id/listView_main_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 

@@ -16,6 +16,7 @@ import com.gkpoter.voiceShare.model.UserModel;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
 import com.gkpoter.voiceShare.util.PictureUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,7 @@ public class CollectsAdapter extends BaseAdapter {
     private PictureUtil pictureUtil;
     private DataUtil util;
 
-    public CollectsAdapter(UserFocusModel data,Context context){
+    public CollectsAdapter(UserFocusModel data, Context context, PullToRefreshListView listView){
         this.data=data;
         this.context=context;
     }

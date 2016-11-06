@@ -57,7 +57,7 @@
 
     </LinearLayout>
 
-    <ListView android:layout_width="match_parent"
+    <com.handmark.pulltorefresh.library.PullToRefreshListView android:layout_width="match_parent"
               android:layout_below="@+id/user_main_linearLayout"
               android:id="@+id/user_main_listView"
               android:layout_height="match_parent"/>

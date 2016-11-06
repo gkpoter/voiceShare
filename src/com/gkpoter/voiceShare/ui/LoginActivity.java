@@ -58,7 +58,7 @@ public class LoginActivity extends Activity{
                         linearLayout.setAlpha(state);
                         state += 0.05;
                     }
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
                 super.run();

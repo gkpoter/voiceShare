@@ -16,6 +16,7 @@ import com.gkpoter.voiceShare.service.Service;
 import com.gkpoter.voiceShare.ui.Adapter.VideoNewsAdapter;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class MainVideoActivity extends Activity {
 
     private ImageView back_main,top,userImage;
     private TextView userName;
-    private ListView newsListview;
+    private PullToRefreshListView newsListview;
     private boolean topState = true;
     private VideoNewsAdapter adapter;
     private RemarkModel remark_data;
@@ -47,7 +48,7 @@ public class MainVideoActivity extends Activity {
     private AsyncBack call=new AsyncBack() {
         @Override
         public void onBack() {
-            adapter = new VideoNewsAdapter(remark_data, getApplicationContext());
+            adapter = new VideoNewsAdapter(remark_data, getApplicationContext(),newsListview);
             newsListview.setAdapter(adapter);
         }
     };
@@ -153,7 +154,7 @@ public class MainVideoActivity extends Activity {
     }
 
     private void showNews() {
-        newsListview= (ListView) findViewById(R.id.video_main_newsList);
+        newsListview= (PullToRefreshListView) findViewById(R.id.video_main_newsList);
         RemarkService service=new RemarkService();
         RequestParams params=new RequestParams();
         params.put("VideoId",util.getData("video_id",""));

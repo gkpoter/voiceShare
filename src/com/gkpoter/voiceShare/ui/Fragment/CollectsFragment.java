@@ -23,6 +23,7 @@ import com.gkpoter.voiceShare.ui.UserActivity;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
 import com.gkpoter.voiceShare.util.PictureUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.RequestParams;
 
 import java.io.File;
@@ -44,7 +45,7 @@ public class CollectsFragment extends Fragment {
     private DataUtil util;
 
     private ImageView searchFriend;
-    private ListView listView;
+    private PullToRefreshListView listView;
     private UserFocusModel data;
     private CollectsAdapter adapter;
     private LinearLayout userSelf;
@@ -54,7 +55,7 @@ public class CollectsFragment extends Fragment {
     private CallBack call=new CallBack() {
         @Override
         public void back() {
-            adapter=new CollectsAdapter(data,getActivity());
+            adapter=new CollectsAdapter(data,getActivity(),listView);
             listView.setAdapter(adapter);
         }
     };
@@ -74,10 +75,11 @@ public class CollectsFragment extends Fragment {
     }
 
     private void viewClick() {
-        listView= (ListView) getView().findViewById(R.id.collects_main_listView);
+        listView= (PullToRefreshListView) getView().findViewById(R.id.collects_main_listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                i--;
                 DataUtil util_=new DataUtil("user_focus",getActivity());
                 util_.clearData();
                 util_.saveData("user_id",data.getFocus().get(i).getUserId()+"");

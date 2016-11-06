@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.model.RemarkModel;
+import com.gkpoter.voiceShare.ui.AdapterUtil.ImageLoader;
 import com.gkpoter.voiceShare.util.PhotoCut;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,13 +22,27 @@ import java.net.URLConnection;
 /**
  * Created by dy on 2016/10/20.
  */
-public class VideoNewsAdapter extends BaseAdapter {
+public class VideoNewsAdapter extends BaseAdapter implements AbsListView.OnScrollListener{
     private RemarkModel remark_data;
     private Context context;
 
-    public VideoNewsAdapter(RemarkModel remark_data,Context context){
+    private int mStart, mEnd;
+
+    public boolean mFirstIn;
+    private static String [] URLS;
+    private ImageLoader mImageLoader;
+
+    public VideoNewsAdapter(RemarkModel remark_data, Context context, PullToRefreshListView newsListview){
         this.remark_data=remark_data;
         this.context=context;
+
+        URLS = new String[remark_data.getRemarkData().size()];
+        for (int i =0;i<remark_data.getRemarkData().size();i++){
+            URLS[i]=remark_data.getRemarkData().get(i).getUserPhoto();
+        }
+        mImageLoader = new ImageLoader(newsListview,false);
+        mFirstIn = true;
+        newsListview.setOnScrollListener(this);
     }
 
     @Override
@@ -61,54 +77,41 @@ public class VideoNewsAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) view.getTag();
         }
 
-        new photoAsyncTask(viewHolder.userImage).execute(remark_data.getRemarkData().get(i).getUserPhoto());
+        viewHolder.userImage.setTag(URLS[i]+i);
+        mImageLoader.showImage(viewHolder.userImage,URLS[i]);
+
         viewHolder.videoinfor.setText("     "+remark_data.getRemarkData().get(i).getRemarkInformation());
         viewHolder.userName.setText(remark_data.getRemarkData().get(i).getUserName());
         viewHolder.uptime.setText(remark_data.getRemarkData().get(i).getRemarkTime());
         return view;
     }
 
+    @Override
+    public void onScrollStateChanged(AbsListView arg0, int scrollState) {
+        // TODO Auto-generated method stub
+
+        if (scrollState == SCROLL_STATE_IDLE) {
+            mImageLoader.loadImages(mStart, mEnd,URLS);
+        } else {
+            mImageLoader.cancelAllTasks();
+        }
+    }
+
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int arg3) {
+        // TODO Auto-generated method stub
+        mStart = firstVisibleItem;
+        mEnd = Math.min(firstVisibleItem + visibleItemCount,remark_data.getRemarkData().size());
+
+        if (mFirstIn && visibleItemCount > 0) {
+            mImageLoader.loadImages(mStart, mEnd,URLS);
+            mFirstIn = false;
+        }
+    }
+
     public class ViewHolder{
         public ImageView userImage;
         public TextView videoinfor,userName,uptime;
     }
-
-    class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
-
-        private ImageView imageView;
-        public photoAsyncTask(ImageView imageView) {
-            this.imageView=imageView;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... strings) {
-            String url=strings[0];
-            Bitmap bitmap=null;
-            URLConnection connection;
-            InputStream inputStream;
-            try {
-                connection=new URL(url).openConnection();
-                inputStream=connection.getInputStream();
-
-                bitmap= BitmapFactory.decodeStream(inputStream);
-
-                inputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return bitmap;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            super.onPostExecute(bitmap);
-            this.imageView.setImageBitmap(PhotoCut.toRoundBitmap(bitmap));
-        }
-    }
-
 }

@@ -47,7 +47,7 @@ public class MainFragment extends Fragment {
         public void onFrishBack() {
             if(FrishKey) {
                 listView.onRefreshComplete();
-                adapter = new MainAdapter(data, getActivity());
+                adapter = new MainAdapter(data, getActivity(),listView);
                 listView.setAdapter(adapter);
                 FrishKey=false;
             }else{

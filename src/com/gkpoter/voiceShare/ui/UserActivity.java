@@ -21,6 +21,7 @@ import com.gkpoter.voiceShare.ui.Adapter.UserAdapter;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
 import com.gkpoter.voiceShare.util.PictureUtil;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.loopj.android.http.RequestParams;
 
 import java.io.File;
@@ -40,7 +41,7 @@ public class UserActivity extends Activity {
     private ImageView image_bg,image_user;
     private TextView focus;
     private VideoModel data;
-    private ListView listView;
+    private PullToRefreshListView listView;
     private UserAdapter adapter;
 
     private DataUtil util;
@@ -52,7 +53,7 @@ public class UserActivity extends Activity {
     private CallBack call=new CallBack() {
         @Override
         public void back() {
-            adapter=new UserAdapter(data,getApplication());
+            adapter=new UserAdapter(data,getApplication(),listView);
             listView.setAdapter(adapter);
         }
     };
@@ -83,7 +84,7 @@ public class UserActivity extends Activity {
         initView();
 
         backtoCollects= (ImageView) findViewById(R.id.user_main_back);
-        listView= (ListView) findViewById(R.id.user_main_listView);
+        listView= (PullToRefreshListView) findViewById(R.id.user_main_listView);
 
     }
 
