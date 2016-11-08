@@ -8,6 +8,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import com.gkpoter.voiceShare.R;
+import com.gkpoter.voiceShare.listener.RefashListener;
 import com.gkpoter.voiceShare.ui.Fragment.*;
 import com.gkpoter.voiceShare.util.FinishListActivity;
 import com.gkpoter.voiceShare.viewpagertransformer.*;
@@ -20,6 +21,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private Fragment[] mFragments;
     private FragmentPagerAdapter adapter;
     private ViewPager viewPager;
+    public static RefashListener refashListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break;
             case R.id.fragment_3:
                 viewPager.setCurrentItem(2);
+                refashListener.back();
                 lightMenu(2);
                 break;
             case R.id.fragment_4:

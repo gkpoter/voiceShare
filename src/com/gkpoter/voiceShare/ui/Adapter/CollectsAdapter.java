@@ -34,7 +34,7 @@ public class CollectsAdapter extends BaseAdapter {
     private PictureUtil pictureUtil;
     private DataUtil util;
 
-    public CollectsAdapter(UserFocusModel data, Context context, PullToRefreshListView listView){
+    public CollectsAdapter(UserFocusModel data, Context context){
         this.data=data;
         this.context=context;
     }

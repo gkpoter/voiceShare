@@ -25,12 +25,12 @@
                             android:background="@drawable/collects_listview_bg"
                           android:layout_height="100dp">
                 <ImageView android:layout_width="65dp"
-                           android:background="@drawable/userimage"
                            android:layout_margin="15dp"
                            android:layout_height="65dp"
                            android:id="@+id/self_user_image"/>
                 <TextView android:layout_width="wrap_content"
-                          android:text="Gkpoter"
+                          android:text=""
+                          android:id="@+id/self_user_Name"
                           android:textSize="25dp"
                           android:gravity="center"
                           android:textColor="#4a4a4a"

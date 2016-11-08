@@ -39,6 +39,14 @@ public class MainAdapter extends BaseAdapter implements AbsListView.OnScrollList
 
     public void setData(MainVideoModel data) {
         this.data = data;
+        URLS = new String[data.getVideoData().size()];
+        URLS_ = new String[data.getUserData().size()];
+        for (int i =0;i<data.getVideoData().size();i++){
+//            URLS = new String[data.getVideoData().size()];
+//            URLS_ = new String[data.getUserData().size()];
+            URLS[i]=data.getVideoData().get(i).getImagePath();
+            URLS_[i]=data.getUserData().get(i).getUserPhoto();
+        }
     }
 
     public MainAdapter(MainVideoModel data, Context context, PullToRefreshListView listView){

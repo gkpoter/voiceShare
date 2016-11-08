@@ -14,11 +14,13 @@ import android.view.ViewGroup;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.listener.RefashListener;
 import com.gkpoter.voiceShare.model.UserFocusModel;
-import com.gkpoter.voiceShare.model.UserModel;
+
 import com.gkpoter.voiceShare.service.UserFocusService;
 import com.gkpoter.voiceShare.ui.Adapter.CollectsAdapter;
 import com.gkpoter.voiceShare.ui.CollectsSearchActivity;
+import com.gkpoter.voiceShare.ui.MainActivity;
 import com.gkpoter.voiceShare.ui.UserActivity;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.PhotoCut;
@@ -31,8 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by dy on 2016/10/19.
@@ -45,17 +45,25 @@ public class CollectsFragment extends Fragment {
     private DataUtil util;
 
     private ImageView searchFriend;
-    private PullToRefreshListView listView;
+    private ListView listView;
     private UserFocusModel data;
     private CollectsAdapter adapter;
     private LinearLayout userSelf;
+
+    private RefashListener refashListener=new RefashListener() {
+        @Override
+        public void back() {
+            getData();
+        }
+    };
     private interface CallBack{
         public void back();
     }
-    private CallBack call=new CallBack() {
+
+    public CallBack call=new CallBack() {
         @Override
         public void back() {
-            adapter=new CollectsAdapter(data,getActivity(),listView);
+            adapter=new CollectsAdapter(data,getActivity());
             listView.setAdapter(adapter);
         }
     };
@@ -72,14 +80,15 @@ public class CollectsFragment extends Fragment {
 
         init();
         viewClick();
+        MainActivity.refashListener=refashListener;
+        UserActivity.refashListener=refashListener;
     }
 
     private void viewClick() {
-        listView= (PullToRefreshListView) getView().findViewById(R.id.collects_main_listView);
+        listView= (ListView) getView().findViewById(R.id.collects_main_listView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                i--;
                 DataUtil util_=new DataUtil("user_focus",getActivity());
                 util_.clearData();
                 util_.saveData("user_id",data.getFocus().get(i).getUserId()+"");
@@ -111,7 +120,7 @@ public class CollectsFragment extends Fragment {
         signature= (TextView) getView().findViewById(R.id.collects_main_userSignature);
         userSelf= (LinearLayout) getView().findViewById(R.id.collects_main_userSelf);
         selfClick();
-        getData();
+        //getData();
     }
 
     public void getData() {
@@ -173,11 +182,6 @@ public class CollectsFragment extends Fragment {
             this.imageView=imageView;
             this.key=false;
         }
-        public photoAsyncTask(ImageView imageView,boolean key) {
-            this.imageView=imageView;
-            this.key=key;
-        }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();

@@ -2,7 +2,12 @@ package com.gkpoter.voiceShare.ui.Fragment;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.Image;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -11,9 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
 import com.gkpoter.voiceShare.model.Model;
@@ -22,6 +25,8 @@ import com.gkpoter.voiceShare.ui.UserActivity;
 import com.gkpoter.voiceShare.ui.self.*;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.HttpRequest;
+import com.gkpoter.voiceShare.util.PhotoCut;
+import com.gkpoter.voiceShare.util.PictureUtil;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -29,14 +34,18 @@ import org.apache.http.Header;
 
 import java.io.*;
 import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
 
 /**
  * Created by dy on 2016/10/19.
  */
-public class SelfFragment extends Fragment implements OnClickListener{
+public class SelfFragment extends Fragment implements OnClickListener {
 
     private ProgressBar progressBar;
-    private RelativeLayout layout,layout_show;
+    private RelativeLayout layout, layout_show;
+    private ImageView userImage;
+    private TextView userName;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,27 +68,32 @@ public class SelfFragment extends Fragment implements OnClickListener{
         getView().findViewById(R.id.self_news_Back_saying).setOnClickListener(this);
         getView().findViewById(R.id.self_setting).setOnClickListener(this);
         getView().findViewById(R.id.self_up_uservideo).setOnClickListener(this);
-        progressBar= (ProgressBar) getView().findViewById(R.id.up_uservideo_progressbar);
-        layout= (RelativeLayout) getView().findViewById(R.id.self_up_uservideo_progressbar);
-        layout_show=(RelativeLayout) getView().findViewById(R.id.self_up_uservideo);
+        progressBar = (ProgressBar) getView().findViewById(R.id.up_uservideo_progressbar);
+        layout = (RelativeLayout) getView().findViewById(R.id.self_up_uservideo_progressbar);
+        layout_show = (RelativeLayout) getView().findViewById(R.id.self_up_uservideo);
+        userImage = (ImageView) getView().findViewById(R.id.self_user_image);
+        userName = (TextView) getView().findViewById(R.id.self_user_Name);
+        DataUtil util = new DataUtil("user", getActivity());
+        userName.setText(util.getData("user_name", ""));
+        new photoAsyncTask(userImage).execute(util.getData("user_photo", ""));
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.self_user_main:
                 DataUtil util = new DataUtil("user", getActivity());
-                DataUtil util_=new DataUtil("user_focus",getActivity());
+                DataUtil util_ = new DataUtil("user_focus", getActivity());
                 util_.clearData();
-                util_.saveData("user_id",util.getData("user_id","")+"");
-                util_.saveData("user_name",util.getData("user_name","")+"");
-                util_.saveData("user_photo",util.getData("user_photo","")+"");
-                util_.saveData("user_signature",util.getData("user_signature","")+"");
-                util_.saveData("user_selfbackgroung",util.getData("user_selfbackgroung","")+"");
-                util_.saveData("user_focus",util.getData("user_focus","")+"");
-                util_.saveData("user_vip",util.getData("user_vip","")+"");
-                util_.saveData("user_logday",util.getData("user_logday","")+"");
-                util_.saveData("user_level",util.getData("user_level","")+"");
+                util_.saveData("user_id", util.getData("user_id", "") + "");
+                util_.saveData("user_name", util.getData("user_name", "") + "");
+                util_.saveData("user_photo", util.getData("user_photo", "") + "");
+                util_.saveData("user_signature", util.getData("user_signature", "") + "");
+                util_.saveData("user_selfbackgroung", util.getData("user_selfbackgroung", "") + "");
+                util_.saveData("user_focus", util.getData("user_focus", "") + "");
+                util_.saveData("user_vip", util.getData("user_vip", "") + "");
+                util_.saveData("user_logday", util.getData("user_logday", "") + "");
+                util_.saveData("user_level", util.getData("user_level", "") + "");
                 startActivity(new Intent(getActivity(), UserActivity.class));
                 break;
             case R.id.self_to_about:
@@ -89,7 +103,7 @@ public class SelfFragment extends Fragment implements OnClickListener{
                 startActivity(new Intent(getActivity(), InformationActivity.class));
                 break;
             case R.id.self_mysterious_:
-                startActivity(new Intent(getActivity(),MysteriousActivity.class));
+                startActivity(new Intent(getActivity(), MysteriousActivity.class));
                 break;
             case R.id.self_news_Back_saying:
                 startActivity(new Intent(getActivity(), NewsBackActivity.class));
@@ -105,7 +119,8 @@ public class SelfFragment extends Fragment implements OnClickListener{
         }
     }
 
-    private final int IMAGE_CODE=1;
+    private final int IMAGE_CODE = 1;
+
     private void upVideo() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("video/*");
@@ -113,6 +128,7 @@ public class SelfFragment extends Fragment implements OnClickListener{
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(Intent.createChooser(intent, "选择视频"), IMAGE_CODE);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != NewsBackActivity.RESULT_OK) {
@@ -123,15 +139,15 @@ public class SelfFragment extends Fragment implements OnClickListener{
         Uri uri = data.getData();
         if (requestCode == IMAGE_CODE) {
             try {
-                File file=new File(new URI(uri.toString()));
-                RequestParams params=new RequestParams();
-                DataUtil util=new DataUtil("user",getActivity());
-                params.put("UserVideo",file);
-                params.put("UserId",util.getData("user_id",""));
+                File file = new File(new URI(uri.toString()));
+                RequestParams params = new RequestParams();
+                DataUtil util = new DataUtil("user", getActivity());
+                params.put("UserVideo", file);
+                params.put("UserId", util.getData("user_id", ""));
                 HttpRequest.post(getActivity(), "up_video", params, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int i, Header[] headers, byte[] bytes) {
-                        Log.d("1231323",new String(bytes));
+                        Log.d("1231323", new String(bytes));
                         try {
                             Model model = new Gson().fromJson(new String(bytes), Model.class);
                             if (model.getState() == 1) {
@@ -141,7 +157,7 @@ public class SelfFragment extends Fragment implements OnClickListener{
                                 getView().findViewById(R.id.self_up_uservideo).setVisibility(View.VISIBLE);
                                 layout.setVisibility(View.GONE);
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
 
@@ -156,17 +172,56 @@ public class SelfFragment extends Fragment implements OnClickListener{
                     public void onProgress(long bytesWritten, long totalSize) {
                         super.onProgress(bytesWritten, totalSize);
                         int count = (int) ((bytesWritten * 1.0 / totalSize) * 100);
-                        Log.d("information", count+"");
+                        Log.d("information", count + "");
                         progressBar.setProgress(count);
-                        if(count == 100){
+                        if (count == 100) {
                             layout_show.setVisibility(View.VISIBLE);
                             layout.setVisibility(View.GONE);
                         }
                     }
                 });
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.getLocalizedMessage();
             }
+        }
+    }
+
+    class photoAsyncTask extends AsyncTask<String,Void,Bitmap> {
+
+        private ImageView imageView;
+        public photoAsyncTask(ImageView imageView) {
+            this.imageView=imageView;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... strings) {
+            String url=strings[0];
+            Bitmap bitmap=null;
+            URLConnection connection;
+            InputStream inputStream;
+            try {
+                connection=new URL(url).openConnection();
+                inputStream=connection.getInputStream();
+
+                bitmap= BitmapFactory.decodeStream(inputStream);
+
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            BitmapDrawable bd= new BitmapDrawable(bitmap);
+            this.imageView.setBackground(bd);
         }
     }
 }

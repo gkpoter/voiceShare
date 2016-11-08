@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
+import com.gkpoter.voiceShare.listener.RefashListener;
 import com.gkpoter.voiceShare.model.VideoModel;
+import com.gkpoter.voiceShare.service.Service;
 import com.gkpoter.voiceShare.service.VideoService;
 import com.gkpoter.voiceShare.ui.Adapter.UserAdapter;
 import com.gkpoter.voiceShare.util.DataUtil;
@@ -42,8 +44,11 @@ public class UserActivity extends Activity {
     private UserAdapter adapter;
     private Button bt;
 
+    public static RefashListener refashListener;
+
     private DataUtil util;
     private PictureUtil pictureUtil;
+    private boolean FOCUS_STATE=false;
 
     private interface CallBack{
         public void back();
@@ -94,6 +99,70 @@ public class UserActivity extends Activity {
         if(util.getData("user_id","").equals(util_.getData("user_id",""))){
             bt.setVisibility(View.GONE);
         }
+        Service service=new Service();
+        RequestParams params=new RequestParams();
+        params.put("UserId",util.getData("user_id",""));
+        params.put("FocusId",util_.getData("user_id",""));
+        service.post(getApplicationContext(), "fState", params, new Listener() {
+            @Override
+            public void onSuccess(Object object) {
+                bt.setText("取消关注");
+                FOCUS_STATE=true;
+            }
+
+            @Override
+            public void onError(String msg) {
+                bt.setText("关注");
+                FOCUS_STATE=false;
+                //Toast.makeText(UserActivity.this,msg+ "", Toast.LENGTH_SHORT).show();
+            }
+        });
+        bt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Service service=new Service();
+                RequestParams params_=new RequestParams();
+                params_.put("UserId",util.getData("user_id",""));
+                params_.put("FocusId",util_.getData("user_id",""));
+                if(FOCUS_STATE){
+                    params_.put("Focus","F");
+                    service.post(getApplicationContext(), "create_f", params_, new Listener() {
+                        @Override
+                        public void onSuccess(Object object) {
+                            bt.setText("关注");
+                            FOCUS_STATE=false;
+                            refashListener.back();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            bt.setText("取消关注");
+                            FOCUS_STATE=true;
+                            Toast.makeText(UserActivity.this,msg+ "", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }else{
+                    params_.put("Focus","T");
+                    service.post(getApplicationContext(), "create_f", params_, new Listener() {
+                        @Override
+                        public void onSuccess(Object object) {
+                            bt.setText("取消关注");
+                            FOCUS_STATE=true;
+                            refashListener.back();
+                        }
+
+                        @Override
+                        public void onError(String msg) {
+                            bt.setText("关注");
+                            FOCUS_STATE=false;
+                            Toast.makeText(UserActivity.this,msg+ "", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }
+        });
+
         pictureUtil = new PictureUtil();
         Bitmap bitmap = pictureUtil.getPicture(Environment.getExternalStorageDirectory().getPath()+"/voiceshare", util.getData("user_name", "")+"_voiceShare");
         if (bitmap == null) {
