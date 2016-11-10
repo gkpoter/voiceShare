@@ -179,7 +179,12 @@ public class UserActivity extends Activity {
             image_bg.setBackground(bd);
         }
         focus.setText(util.getData("user_focus","")+" 人已关注");
-        say.setText(util.getData("user_signature",""));
+//        say.setText(util.getData("user_signature",""));
+        if("".equals(util.getData("user_signature", ""))){
+            say.setText("点击编辑个性签名...");
+        }else{
+            say.setText("        "+util.getData("user_signature", ""));
+        }
     }
 
     public void getData(){

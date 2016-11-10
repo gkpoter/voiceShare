@@ -45,7 +45,7 @@ public class SelfFragment extends Fragment implements OnClickListener {
     private ProgressBar progressBar;
     private RelativeLayout layout, layout_show;
     private ImageView userImage;
-    private TextView userName;
+    private TextView userName,level,signature;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,8 +73,16 @@ public class SelfFragment extends Fragment implements OnClickListener {
         layout_show = (RelativeLayout) getView().findViewById(R.id.self_up_uservideo);
         userImage = (ImageView) getView().findViewById(R.id.self_user_image);
         userName = (TextView) getView().findViewById(R.id.self_user_Name);
+        level= (TextView) getView().findViewById(R.id.self_user_level);
+        signature= (TextView) getView().findViewById(R.id.self_user_signature);
         DataUtil util = new DataUtil("user", getActivity());
         userName.setText(util.getData("user_name", ""));
+        level.setText("Lv "+util.getData("user_level","0"));
+        if("".equals(util.getData("user_signature", ""))){
+            signature.setText("点击编辑个性签名...");
+        }else{
+            signature.setText("        "+util.getData("user_signature", ""));
+        }
         new photoAsyncTask(userImage).execute(util.getData("user_photo", ""));
     }
 

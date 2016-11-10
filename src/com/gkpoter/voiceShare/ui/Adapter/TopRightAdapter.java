@@ -86,6 +86,8 @@ public class TopRightAdapter extends BaseAdapter implements AbsListView.OnScroll
             viewHolder.numstate= (TextView) view.findViewById(R.id.top_rightList_num_state);
             viewHolder.layout= (LinearLayout) view.findViewById(R.id.top_rightList_image);
             viewHolder.video_infor= (TextView) view.findViewById(R.id.top_rightList_video_infor);
+            viewHolder.video_date= (TextView) view.findViewById(R.id.top_rightList_date);
+
 
             view.setTag(viewHolder);
         }else {
@@ -94,6 +96,7 @@ public class TopRightAdapter extends BaseAdapter implements AbsListView.OnScroll
 
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
         viewHolder.num.setText(data.getVideoData().get(i).getVideoMonthTop()+"");
+        viewHolder.video_date.setText("上传时间 : "+data.getVideoData().get(i).getUpTime());
         viewHolder.video_infor.setText(data.getVideoData().get(i).getVideoInformation());
         if(data.getVideoData().get(i).getStarState()) {
             viewHolder.numstate.setText("+");
@@ -156,6 +159,6 @@ public class TopRightAdapter extends BaseAdapter implements AbsListView.OnScroll
     public class ViewHolder{
         public LinearLayout layout;
         public ImageView imageView,userImage;
-        public TextView num,userName,numstate,video_infor;
+        public TextView num,userName,numstate,video_infor,video_date;
     }
 }

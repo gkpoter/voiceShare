@@ -28,19 +28,60 @@
                            android:layout_margin="15dp"
                            android:layout_height="65dp"
                            android:id="@+id/self_user_image"/>
-                <TextView android:layout_width="wrap_content"
-                          android:text=""
-                          android:id="@+id/self_user_Name"
-                          android:textSize="25dp"
-                          android:gravity="center"
-                          android:textColor="#4a4a4a"
-                          android:layout_height="match_parent"
-                          android:layout_toEndOf="@+id/self_user_image"/>
+                <LinearLayout android:layout_width="match_parent"
+                              android:orientation="vertical"
+                              android:layout_toEndOf="@+id/self_user_image"
+                              android:layout_toStartOf="@+id/self_user_sign_day"
+                              android:layout_height="match_parent">
+                    <LinearLayout android:layout_width="match_parent"
+                                  android:orientation="horizontal"
+                                  android:layout_weight="2"
+                                  android:layout_height="match_parent">
+                        <TextView android:layout_width="wrap_content"
+                                  android:text="gkpoter"
+                                  android:id="@+id/self_user_Name"
+                                  android:textSize="25sp"
+                                  android:gravity="center"
+                                  android:textColor="#4a4a4a"
+                                  android:layout_height="match_parent"/>
+                        <LinearLayout android:layout_width="35dp"
+                                      android:orientation="vertical"
+                                      android:gravity="center"
+                                      android:layout_marginLeft="5dp"
+                                      android:layout_height="match_parent">
+                            <ImageView android:layout_width="match_parent"
+                                       android:layout_gravity="center"
+                                       android:background="@drawable/user_top"
+                                       android:layout_height="8dp"/>
+                            <TextView android:layout_width="match_parent"
+                                      android:id="@+id/self_user_level"
+                                      android:background="#fff987"
+                                      android:gravity="center"
+                                      android:textStyle="bold"
+                                      android:textColor="#ff9211"
+                                      android:textSize="10sp"
+                                      android:layout_height="12dp"/>
+                        </LinearLayout>
+
+                    </LinearLayout>
+                    <TextView android:layout_width="match_parent"
+                              android:layout_weight="3"
+                              android:id="@+id/self_user_signature"
+                              android:editable="true"
+                              android:textStyle="italic"
+                              android:textColor="#515151"
+                              android:textSize="13sp"
+                              android:layout_height="match_parent"/>
+                </LinearLayout>
+
                 <Button android:layout_width="50dp"
                         android:text="签到"
                         android:textColor="#ffffff"
                         android:background="@drawable/blue_button_bg"
-                        android:layout_margin="35dp"
+                        android:layout_marginTop="35dp"
+                        android:layout_marginBottom="35dp"
+                        android:layout_marginRight="35dp"
+                        android:id="@+id/self_user_sign_day"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"/>
             </RelativeLayout>
@@ -111,7 +152,7 @@
                              style="?android:attr/progressBarStyleHorizontal"
                              android:max="100"
                              android:progress="0"
-                             android:layout_height="55dp"/>
+                             android:layout_height="55dp" android:indeterminate="false"/>
 
             </RelativeLayout>
             <TextView android:layout_width="match_parent" android:layout_height="5dp"/>

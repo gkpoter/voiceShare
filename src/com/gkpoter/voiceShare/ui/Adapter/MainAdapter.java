@@ -92,6 +92,7 @@ public class MainAdapter extends BaseAdapter implements AbsListView.OnScrollList
             viewHolder.userName= (TextView) view.findViewById(R.id.main_data_userName);
             viewHolder.layout= (RelativeLayout) view.findViewById(R.id.video_layout);
             viewHolder.videoView= (VideoView) view.findViewById(R.id.video_main_);
+            viewHolder.videodate= (TextView) view.findViewById(R.id.main_data_date);
 
             view.setTag(viewHolder);
         }else {
@@ -126,6 +127,7 @@ public class MainAdapter extends BaseAdapter implements AbsListView.OnScrollList
 
         viewHolder.videoTitle.setText(data.getVideoData().get(i).getVideoInformation());
         viewHolder.userName.setText(data.getUserData().get(i).getUserName());
+        viewHolder.videodate.setText("上传时间 : "+data.getVideoData().get(i).getUpTime());
 
         final ViewHolder finalViewHolder = viewHolder;
         viewHolder.imageView.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +190,7 @@ public class MainAdapter extends BaseAdapter implements AbsListView.OnScrollList
 
     public class ViewHolder{
         public ImageView imageView,userImage;
-        public TextView videoTitle,userName;
+        public TextView videoTitle,userName,videodate;
         public RelativeLayout layout;
         public VideoView videoView;
     }

@@ -40,7 +40,7 @@ public class VideoNewsAdapter extends BaseAdapter implements AbsListView.OnScrol
         for (int i =0;i<remark_data.getRemarkData().size();i++){
             URLS[i]=remark_data.getRemarkData().get(i).getUserPhoto();
         }
-        mImageLoader = new ImageLoader(newsListview,false);
+        mImageLoader = new ImageLoader(newsListview,true);
         mFirstIn = true;
         newsListview.setOnScrollListener(this);
     }

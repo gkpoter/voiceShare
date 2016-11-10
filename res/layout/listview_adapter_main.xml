@@ -52,6 +52,15 @@
                   android:layout_height="match_parent"
                   android:layout_toEndOf="@+id/main_data_userImage"/>
 
+        <TextView android:layout_width="wrap_content"
+                  android:id="@+id/main_data_date"
+                  android:gravity="center_vertical"
+                  android:textSize="15sp"
+                  android:textColor="#727272"
+                  android:layout_marginRight="10dp"
+                  android:layout_toLeftOf="@+id/news_image"
+                  android:layout_height="match_parent"/>
+
         <ImageView android:layout_width="50dp"
                    android:clickable="true"
                    android:id="@+id/news_image"
