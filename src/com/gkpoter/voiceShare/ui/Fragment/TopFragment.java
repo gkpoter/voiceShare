@@ -15,10 +15,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
+import android.widget.*;
 import com.gkpoter.voiceShare.R;
 import com.gkpoter.voiceShare.listener.Listener;
 import com.gkpoter.voiceShare.model.MainVideoModel;
@@ -51,6 +48,8 @@ public class TopFragment extends Fragment {
     private ImageView imageView2;
     private ImageView imageView3;
     private MainVideoModel data;
+    private LinearLayout tvTop1,tvTop2,tvTop3;
+    private TextView top1,top2,top3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,6 +76,12 @@ public class TopFragment extends Fragment {
 
         viewFlipper= (ViewFlipper) getView().findViewById(R.id.top_main_viewFlipper);
 
+        tvTop1= (LinearLayout) getView().findViewById(R.id.top_main_lin1);
+        tvTop2= (LinearLayout) getView().findViewById(R.id.top_main_lin2);
+        tvTop3= (LinearLayout) getView().findViewById(R.id.top_main_lin3);
+        top1= (TextView) getView().findViewById(R.id.top_main_top1_title);
+        top2= (TextView) getView().findViewById(R.id.top_main_top2_title);
+        top3= (TextView) getView().findViewById(R.id.top_main_top3_title);
     }
 
     private void showPagerView() {
@@ -138,11 +143,12 @@ public class TopFragment extends Fragment {
 //        viewFlipper.addView(imageView2);
 //        viewFlipper.addView(imageView3);
         nextView();
-        topClick(imageView1,imageView2,imageView3);
+        topClick();
     }
 
-    private void topClick(ImageView imageView1,ImageView imageView2,ImageView imageView3){
-        imageView1.setOnClickListener(new View.OnClickListener() {
+    private void topClick(){
+
+        tvTop1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DataUtil util=new DataUtil("video_data",getActivity());
@@ -155,7 +161,7 @@ public class TopFragment extends Fragment {
                 startActivity(new Intent(getActivity(), MainVideoActivity.class));
             }
         });
-        imageView2.setOnClickListener(new View.OnClickListener() {
+        tvTop2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DataUtil util=new DataUtil("video_data",getActivity());
@@ -168,7 +174,7 @@ public class TopFragment extends Fragment {
                 startActivity(new Intent(getActivity(), MainVideoActivity.class));
             }
         });
-        imageView3.setOnClickListener(new View.OnClickListener() {
+        tvTop3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DataUtil util=new DataUtil("video_data",getActivity());
@@ -218,6 +224,9 @@ public class TopFragment extends Fragment {
                     new photoAsyncTask(imageView1).execute(data.getVideoData().get(0).getImagePath());
                     new photoAsyncTask(imageView2).execute(data.getVideoData().get(1).getImagePath());
                     new photoAsyncTask(imageView3).execute(data.getVideoData().get(2).getImagePath());
+                    top1.setText(data.getVideoData().get(0).getVideoInformation());
+                    top2.setText(data.getVideoData().get(1).getVideoInformation());
+                    top3.setText(data.getVideoData().get(2).getVideoInformation());
                 }catch (Exception e){
                     e.printStackTrace();
                 }

@@ -83,7 +83,7 @@
                        android:layout_marginRight="35dp"
                        android:layout_height="25dp"/>
             <TextView android:layout_width="match_parent"
-                      android:text="收藏"
+                      android:text="关注"
                       android:gravity="center"
                       android:textColor="#979797"
                       android:layout_height="match_parent"/>

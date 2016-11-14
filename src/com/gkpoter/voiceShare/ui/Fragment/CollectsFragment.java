@@ -153,7 +153,11 @@ public class CollectsFragment extends Fragment {
         }
         userName.setText(util.getData("user_name",""));
         focus.setText(util.getData("user_focus","")+" 人已关注");
-        signature.setText(util.getData("user_signature",""));
+        if("".equals(util.getData("user_signature",""))){
+            signature.setText("暂无签名...");
+        }else {
+            signature.setText(util.getData("user_signature", ""));
+        }
 
         userSelf.setOnClickListener(new View.OnClickListener() {
             @Override
