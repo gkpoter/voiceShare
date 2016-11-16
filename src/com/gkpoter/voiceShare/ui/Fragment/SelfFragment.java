@@ -1,15 +1,13 @@
 package com.gkpoter.voiceShare.ui.Fragment;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
+
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,15 +16,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.gkpoter.voiceShare.R;
+
 import com.gkpoter.voiceShare.listener.Listener;
 import com.gkpoter.voiceShare.model.Model;
+
 import com.gkpoter.voiceShare.service.Service;
 import com.gkpoter.voiceShare.ui.UserActivity;
 import com.gkpoter.voiceShare.ui.self.*;
 import com.gkpoter.voiceShare.util.DataUtil;
 import com.gkpoter.voiceShare.util.HttpRequest;
-import com.gkpoter.voiceShare.util.PhotoCut;
-import com.gkpoter.voiceShare.util.PictureUtil;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -36,6 +34,7 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Calendar;
 
 /**
  * Created by dy on 2016/10/19.
@@ -68,6 +67,7 @@ public class SelfFragment extends Fragment implements OnClickListener {
         getView().findViewById(R.id.self_news_Back_saying).setOnClickListener(this);
         getView().findViewById(R.id.self_setting).setOnClickListener(this);
         getView().findViewById(R.id.self_up_uservideo).setOnClickListener(this);
+        getView().findViewById(R.id.self_user_sign_day).setOnClickListener(this);
         progressBar = (ProgressBar) getView().findViewById(R.id.up_uservideo_progressbar);
         layout = (RelativeLayout) getView().findViewById(R.id.self_up_uservideo_progressbar);
         layout_show = (RelativeLayout) getView().findViewById(R.id.self_up_uservideo);
@@ -124,6 +124,33 @@ public class SelfFragment extends Fragment implements OnClickListener {
                 layout_show.setVisibility(View.GONE);
                 layout.setVisibility(View.VISIBLE);
                 break;
+            case R.id.self_user_sign_day:sign();
+            break;
+        }
+    }
+
+    private void sign() {
+        DataUtil util_=new DataUtil("user",getActivity());
+        Calendar calendar=Calendar.getInstance();
+        String day = calendar.get(Calendar.DAY_OF_MONTH)+"";
+        if(day.equals(util_.getData("day_",""))){
+            Toast.makeText(getActivity(), "今天已经签到！", Toast.LENGTH_SHORT).show();
+        }else{
+            Service service=new Service();
+            RequestParams params=new RequestParams();
+            params.put("UserId",util_.getData("user_id",""));
+            service.post(getActivity(), "log_day", params, new Listener() {
+                @Override
+                public void onSuccess(Object object) {
+                    util_.saveData("day_",day);
+                    Toast.makeText(getActivity(), "签到成功", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(String msg) {
+                    Toast.makeText(getActivity(),msg + "", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

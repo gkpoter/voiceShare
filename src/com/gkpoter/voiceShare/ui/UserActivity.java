@@ -132,6 +132,7 @@ public class UserActivity extends Activity {
                             bt.setText("关注");
                             FOCUS_STATE=false;
                             refashListener.back();
+                            //getData();
                         }
 
                         @Override
@@ -149,6 +150,7 @@ public class UserActivity extends Activity {
                             bt.setText("取消关注");
                             FOCUS_STATE=true;
                             refashListener.back();
+                            //getData();
                         }
 
                         @Override

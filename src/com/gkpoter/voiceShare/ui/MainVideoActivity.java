@@ -38,6 +38,7 @@ public class MainVideoActivity extends Activity {
     private RemarkModel remark_data;
     private VideoView video_view;
     private DataUtil util;
+    private DataUtil util_star;
 
     private TextView upremark;
     private EditText editremark;
@@ -119,38 +120,46 @@ public class MainVideoActivity extends Activity {
             }
         });
         top= (ImageView) findViewById(R.id.video_main_top);
-        top.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (topState){
-                    Service service=new Service();
-                    RequestParams params=new RequestParams();
-                    params.put("VideoTop","+");
-                    params.put("VideoId",util.getData("video_id",""));
-                    service.post(getApplicationContext(), "video_top", params, new Listener() {
-                        @Override
-                        public void onSuccess(Object object) {}
-                        @Override
-                        public void onError(String msg) {}
-                    });
-                    top.setBackgroundResource(R.drawable.top2);
-                    topState=false;
-                }else{
-                    Service service=new Service();
-                    RequestParams params=new RequestParams();
-                    params.put("VideoTop","-");
-                    params.put("VideoId",util.getData("video_id",""));
-                    service.post(getApplicationContext(), "video_top", params, new Listener() {
-                        @Override
-                        public void onSuccess(Object object) {}
-                        @Override
-                        public void onError(String msg) {}
-                    });
-                    top.setBackgroundResource(R.drawable.top1);
-                    topState=true;
+        util_star=new DataUtil(util.getData("user_name","")+"star",getApplicationContext());
+        if("yes".equals(util_star.getData(util.getData("video_id",""),""))){
+            top.setBackgroundResource(R.drawable.top2);
+            topState=false;
+        }
+            top.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (topState){
+                        Service service=new Service();
+                        RequestParams params=new RequestParams();
+                        params.put("VideoTop","+");
+                        params.put("VideoId",util.getData("video_id",""));
+                        service.post(getApplicationContext(), "video_top", params, new Listener() {
+                            @Override
+                            public void onSuccess(Object object) {}
+                            @Override
+                            public void onError(String msg) {}
+                        });
+                        util_star.saveData(util.getData("video_id",""),"yes");
+                        top.setBackgroundResource(R.drawable.top2);
+                        topState=false;
+                    }else{
+                        Service service=new Service();
+                        RequestParams params=new RequestParams();
+                        params.put("VideoTop","-");
+                        params.put("VideoId",util.getData("video_id",""));
+                        service.post(getApplicationContext(), "video_top", params, new Listener() {
+                            @Override
+                            public void onSuccess(Object object) {}
+                            @Override
+                            public void onError(String msg) {}
+                        });
+                        util_star.clearData();
+                        top.setBackgroundResource(R.drawable.top1);
+                        topState=true;
+                    }
                 }
-            }
-        });
+            });
+
     }
 
     private void showNews() {
