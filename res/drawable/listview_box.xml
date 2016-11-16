@@ -11,8 +11,8 @@
             <gradient
                     android:angle="270"
 
-                    android:endColor="#0F000000"
-                    android:startColor="#0F000000" />
+                    android:endColor="#0f000000"
+                    android:startColor="#0f000000" />
 
             <corners
                     android:bottomLeftRadius="6dip"
@@ -26,7 +26,7 @@
     <!-- 形象的表达：bottom代表背景部分在上边缘超出阴影的高度，right代表背景部分在左边超出阴影的宽度（相对应的offset） -->
     <item
             android:bottom="6dp"
-            android:right="6dp">
+            android:right="4dp">
         <shape android:shape="rectangle" >
 
             <gradient

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ThirdLibrary/library/library.iml" filepath="$PROJECT_DIR$/ThirdLibrary/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ThirdLibrary/galleryfinal/src/main/main.iml" filepath="$PROJECT_DIR$/ThirdLibrary/galleryfinal/src/main/main.iml" />
       <module fileurl="file://$PROJECT_DIR$/voiceShare.iml" filepath="$PROJECT_DIR$/voiceShare.iml" />
     </modules>
   </component>

@@ -120,7 +120,7 @@ public class CollectsFragment extends Fragment {
         signature= (TextView) getView().findViewById(R.id.collects_main_userSignature);
         userSelf= (LinearLayout) getView().findViewById(R.id.collects_main_userSelf);
         selfClick();
-        //getData();
+        getData();
     }
 
     public void getData() {

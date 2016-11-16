@@ -6,7 +6,7 @@
               android:layout_height="match_parent">
 
     <RelativeLayout android:layout_width="match_parent"
-                    android:layout_margin="2dp"
+                    android:layout_margin="0dp"
                     android:background="#fff"
                     android:layout_height="215dp">
         <ViewFlipper android:layout_width="match_parent"
@@ -26,9 +26,8 @@
                           android:text=""
                           android:id="@+id/top_main_top1_title"
                           android:textSize="25sp"
-                          android:gravity="right"
-                          android:paddingRight="15dp"
-                          android:paddingTop="20dp"
+                          android:gravity="center_vertical"
+                          android:paddingLeft="5dp"
                           android:textColor="#ffffff"
                           android:layout_weight="1"
                           android:layout_height="match_parent"/>
@@ -40,7 +39,7 @@
                            android:layout_height="match_parent"/>
             </LinearLayout>
             <TextView android:layout_width="match_parent"
-                      android:background="#d3d3d3"
+                      android:background="#828282"
                       android:alpha="0.1"
                       android:layout_height="1dp"/>
             <LinearLayout android:layout_width="match_parent"
@@ -52,9 +51,8 @@
                           android:text=""
                           android:id="@+id/top_main_top2_title"
                           android:textSize="25sp"
-                          android:gravity="right"
-                          android:paddingRight="15dp"
-                          android:paddingTop="20dp"
+                          android:gravity="center_vertical"
+                          android:paddingLeft="5dp"
                           android:textColor="#ffffff"
                           android:layout_weight="1"
                           android:layout_height="match_parent"/>
@@ -66,7 +64,7 @@
                            android:layout_height="match_parent"/>
             </LinearLayout>
             <TextView android:layout_width="match_parent"
-                      android:background="#d3d3d3"
+                      android:background="#828282"
                       android:alpha="0.1"
                       android:layout_height="1dp"/>
             <LinearLayout android:layout_width="match_parent"
@@ -78,9 +76,8 @@
                           android:text=""
                           android:id="@+id/top_main_top3_title"
                           android:textSize="25sp"
-                          android:gravity="right"
-                          android:paddingRight="15dp"
-                          android:paddingTop="20dp"
+                          android:gravity="center_vertical"
+                          android:paddingLeft="5dp"
                           android:textColor="#ffffff"
                           android:layout_weight="1"
                           android:layout_height="match_parent"/>
